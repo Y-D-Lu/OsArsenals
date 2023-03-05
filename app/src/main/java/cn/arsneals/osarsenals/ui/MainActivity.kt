@@ -6,7 +6,10 @@ import android.view.View
 import android.widget.Button
 import android.widget.RelativeLayout
 import cn.arsneals.osarsenals.R
+import cn.arsneals.osarsenals.jni.ArsenalsJni
+import cn.arsneals.osarsenals.manager.DeviceStatusManager
 import cn.arsneals.osarsenals.utils.Alog
+import cn.arsneals.osarsenals.utils.DeviceStatusUtil
 import cn.arsneals.osarsenals.views.FunctionView
 import cn.arsneals.osarsenals.views.OverviewView
 import cn.arsneals.osarsenals.views.SettingsView
@@ -39,6 +42,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         mSettingsView = SettingsView(this)
         mMainRelativelayout.addView(mOverviewView)
         mCurrentView = mOverviewView
+
+        Alog.verbose(TAG, "onCreate : " + ArsenalsJni().stringFromJNI("Hello world"))
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        DeviceStatusManager.getInstance().init()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        DeviceStatusManager.getInstance().uninit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     override fun onClick(view: View?) {
