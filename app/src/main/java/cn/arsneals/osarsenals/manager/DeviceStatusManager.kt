@@ -110,24 +110,32 @@ class DeviceStatusManager {
             }
         }
 
+        var availableCpuCount = 0
         if (mCpuOnlineList.size != mTotalCpuCount) {
             mCpuOnlineList.clear()
             for (i in 0 until mTotalCpuCount) {
-                mCpuOnlineList.add(DeviceStatusUtil.isCpuOnline(i))
+                val isOnline = DeviceStatusUtil.isCpuOnline(i)
+                mCpuOnlineList.add(isOnline)
+                if (isOnline) {
+                    availableCpuCount++
+                }
             }
         } else {
             for (i in 0 until mTotalCpuCount) {
+                val isOnline = DeviceStatusUtil.isCpuOnline(i)
                 mCpuOnlineList[i] = DeviceStatusUtil.isCpuOnline(i)
+                if (isOnline) {
+                    availableCpuCount++
+                }
             }
         }
 
         val cpuUtilizationStr = DeviceStatusUtil.getCpuUtilizationStr()
         val cpuUtilizationStrList = cpuUtilizationStr.split(",")
-        val listSize = mTotalCpuCount + 1
+
+        val listSize = availableCpuCount + 1
         if (cpuUtilizationStrList.size == listSize * 2) {
             try {
-                val cpuTotalTimeList = ArrayList<Int>()
-                val cpuIdleTimeList = ArrayList<Int>()
                 if (mCpuLastTotalTimeList.size != listSize
                     || mCpuLastIdleTimeList.size != listSize || mCpuUtilizationList.size != listSize) {
                     mCpuLastTotalTimeList.clear()
@@ -154,7 +162,8 @@ class DeviceStatusManager {
             }
         } else {
             Alog.warn(TAG,
-                "cpuUtilizationStrList.size ${cpuUtilizationStrList.size} not equals mTotalCpuCount $mTotalCpuCount")
+                "cpuUtilizationStrList ${cpuUtilizationStrList}" +
+                    " size ${cpuUtilizationStrList.size} not equals availableCpuCount $availableCpuCount")
         }
 
         mCpuTemp = DeviceStatusUtil.getCpuTemperature()
