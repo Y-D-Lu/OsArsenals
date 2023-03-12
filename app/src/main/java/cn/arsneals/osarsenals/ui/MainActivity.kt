@@ -2,12 +2,15 @@ package cn.arsneals.osarsenals.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.RelativeLayout
 import cn.arsneals.osarsenals.R
 import cn.arsneals.osarsenals.jni.ArsenalsJni
 import cn.arsneals.osarsenals.manager.DeviceStatusManager
+import cn.arsneals.osarsenals.manager.OverviewViewManager
 import cn.arsneals.osarsenals.utils.Alog
 import cn.arsneals.osarsenals.utils.DeviceStatusUtil
 import cn.arsneals.osarsenals.views.FunctionView
@@ -48,14 +51,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-
-        DeviceStatusManager.getInstance().init()
     }
 
     override fun onPause() {
         super.onPause()
-
-        DeviceStatusManager.getInstance().uninit()
     }
 
     override fun onDestroy() {
@@ -91,6 +90,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             else->{
                 Alog.warn(TAG, "onClick on unknown view $view")
             }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.main_menu_pin -> {
+                OverviewViewManager.getInstance().addView()
+                true
+            }
+            R.id.main_menu_record -> {
+                OverviewViewManager.getInstance().removeView()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

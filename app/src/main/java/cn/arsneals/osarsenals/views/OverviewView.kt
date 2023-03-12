@@ -34,6 +34,6 @@ class OverviewView : RelativeLayout {
         Alog.debug(TAG, "initView")
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         mView = inflater.inflate(R.layout.overview_view, this)
-        mMonitorView = findViewById(R.id.overview_monitorview)
+//        mMonitorView = findViewById(R.id.overview_monitorview)
     }
 }
