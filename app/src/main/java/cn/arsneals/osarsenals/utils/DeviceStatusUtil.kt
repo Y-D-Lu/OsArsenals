@@ -1,6 +1,7 @@
 package cn.arsneals.osarsenals.utils
 
 import cn.arsneals.osarsenals.jni.ArsenalsJni
+import cn.arsneals.osarsenals.root.ArsenalsRoot
 
 class DeviceStatusUtil {
     companion object {
@@ -155,6 +156,27 @@ class DeviceStatusUtil {
                 Alog.warn(TAG, "getCurrentFps NumberFormatException")
             }
             return ret
+        }
+
+        fun isThermalEnabled(): Boolean {
+            val thermal1 = !"disabled".equals(ArsenalsJni().getStringValFromFile(
+                "/sys/class/thermal/thermal_zone0/mode"))
+            val thermal2 = !"disabled".equals(ArsenalsJni().getStringValFromFile(
+                "/sys/class/thermal/thermal_zone1/mode"))
+            Alog.verbose(TAG, "thermal1 $thermal1 thermal2 $thermal2")
+            return thermal1 || thermal2
+        }
+
+        fun setThermalEnableStatus(isEnable: Boolean): Boolean {
+            val str = if (isEnable) "enabled" else "disabled"
+            val isSucc1 = ArsenalsRoot.getInstance().execAsRoot("echo $str > /sys/class/thermal/thermal_zone0/mode\n")
+            val isSucc2 = ArsenalsRoot.getInstance().execAsRoot("echo $str > /sys/class/thermal/thermal_zone1/mode\n")
+            if (isSucc1 && isSucc2) {
+                Alog.verbose(TAG, "setThermalEnableStatus $isEnable exec succeed")
+                return true
+            }
+            Alog.warn(TAG, "setThermalEnableStatus $isEnable exec failed!")
+            return false
         }
     }
 }
