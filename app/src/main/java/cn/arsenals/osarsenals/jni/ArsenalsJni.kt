@@ -1,4 +1,4 @@
-package cn.arsneals.osarsenals.jni
+package cn.arsenals.osarsenals.jni
 
 class ArsenalsJni {
     /**

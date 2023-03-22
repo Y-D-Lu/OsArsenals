@@ -1,12 +1,12 @@
-package cn.arsneals.osarsenals.views
+package cn.arsenals.osarsenals.views
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
-import cn.arsneals.osarsenals.R
-import cn.arsneals.osarsenals.utils.Alog
+import cn.arsenals.osarsenals.R
+import cn.arsenals.osarsenals.utils.Alog
 
 class SettingsView : RelativeLayout {
     private val TAG = "SettingsView"

@@ -88,7 +88,7 @@ std::string GetCpuUtilizationStr() {
     }
 }
 
-extern "C" JNIEXPORT jstring JNICALL Java_cn_arsneals_osarsenals_jni_ArsenalsJni_stringFromJNI(
+extern "C" JNIEXPORT jstring JNICALL Java_cn_arsenals_osarsenals_jni_ArsenalsJni_stringFromJNI(
         JNIEnv* env,
         jobject /* this */,
         jstring input) {
@@ -97,7 +97,7 @@ extern "C" JNIEXPORT jstring JNICALL Java_cn_arsneals_osarsenals_jni_ArsenalsJni
     return env->NewStringUTF(hello.c_str());
 }
 
-extern "C" JNIEXPORT jstring JNICALL Java_cn_arsneals_osarsenals_jni_ArsenalsJni_getStringValFromFile(
+extern "C" JNIEXPORT jstring JNICALL Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getStringValFromFile(
     JNIEnv *env, jobject, jstring path) {
     std::string pathStr = Jstring2String(env, path);
     char ret[255] = {0};
@@ -105,7 +105,7 @@ extern "C" JNIEXPORT jstring JNICALL Java_cn_arsneals_osarsenals_jni_ArsenalsJni
     return env->NewStringUTF(ret);
 }
 
-extern "C" JNIEXPORT jstring JNICALL Java_cn_arsneals_osarsenals_jni_ArsenalsJni_getStringValFromCmd(
+extern "C" JNIEXPORT jstring JNICALL Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getStringValFromCmd(
     JNIEnv *env, jobject, jstring cmd) {
     std::string cmdStr = Jstring2String(env, cmd);
     char ret[255] = {0};
@@ -113,12 +113,12 @@ extern "C" JNIEXPORT jstring JNICALL Java_cn_arsneals_osarsenals_jni_ArsenalsJni
     return env->NewStringUTF(ret);
 }
 
-extern "C" JNIEXPORT jstring JNICALL Java_cn_arsneals_osarsenals_jni_ArsenalsJni_getCpuUtilizationStr(
+extern "C" JNIEXPORT jstring JNICALL Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getCpuUtilizationStr(
     JNIEnv *env, jobject) {
     return env->NewStringUTF(GetCpuUtilizationStr().c_str());
 }
 
-extern "C" JNIEXPORT jstring JNICALL Java_cn_arsneals_osarsenals_jni_ArsenalsJni_getAioStatus(
+extern "C" JNIEXPORT jstring JNICALL Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getAioStatus(
     JNIEnv *env, jobject) {
     std::string ret = "";
     return env->NewStringUTF(ret.c_str());

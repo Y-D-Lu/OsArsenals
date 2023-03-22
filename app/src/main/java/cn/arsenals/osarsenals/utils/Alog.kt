@@ -1,4 +1,4 @@
-package cn.arsneals.osarsenals.utils
+package cn.arsenals.osarsenals.utils
 
 import android.util.Log
 

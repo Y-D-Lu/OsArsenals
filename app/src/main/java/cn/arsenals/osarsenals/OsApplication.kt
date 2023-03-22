@@ -1,10 +1,10 @@
-package cn.arsneals.osarsenals
+package cn.arsenals.osarsenals
 
 import android.app.Application
 import android.content.res.Configuration
-import cn.arsneals.osarsenals.manager.DeviceStatusManager
-import cn.arsneals.osarsenals.manager.OverviewViewManager
-import cn.arsneals.osarsenals.utils.Alog
+import cn.arsenals.osarsenals.manager.DeviceStatusManager
+import cn.arsenals.osarsenals.manager.OverviewViewManager
+import cn.arsenals.osarsenals.utils.Alog
 
 class OsApplication: Application() {
     val TAG = "OsApplication"

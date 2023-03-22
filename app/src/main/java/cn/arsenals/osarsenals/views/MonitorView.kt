@@ -1,4 +1,4 @@
-package cn.arsneals.osarsenals.views
+package cn.arsenals.osarsenals.views
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
-import cn.arsneals.osarsenals.R
-import cn.arsneals.osarsenals.manager.DeviceStatusManager
-import cn.arsneals.osarsenals.model.DeviceStatusInfo
-import cn.arsneals.osarsenals.utils.Alog
+import cn.arsenals.osarsenals.R
+import cn.arsenals.osarsenals.manager.DeviceStatusManager
+import cn.arsenals.osarsenals.model.DeviceStatusInfo
+import cn.arsenals.osarsenals.utils.Alog
 import kotlin.math.roundToInt
 
 class MonitorView : RelativeLayout {

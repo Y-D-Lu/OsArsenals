@@ -1,4 +1,4 @@
-package cn.arsneals.osarsenals.ui
+package cn.arsenals.osarsenals.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,15 +7,15 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.RelativeLayout
-import cn.arsneals.osarsenals.R
-import cn.arsneals.osarsenals.jni.ArsenalsJni
-import cn.arsneals.osarsenals.manager.DeviceStatusManager
-import cn.arsneals.osarsenals.manager.OverviewViewManager
-import cn.arsneals.osarsenals.utils.Alog
-import cn.arsneals.osarsenals.utils.DeviceStatusUtil
-import cn.arsneals.osarsenals.views.FunctionView
-import cn.arsneals.osarsenals.views.OverviewView
-import cn.arsneals.osarsenals.views.SettingsView
+import cn.arsenals.osarsenals.R
+import cn.arsenals.osarsenals.jni.ArsenalsJni
+import cn.arsenals.osarsenals.manager.DeviceStatusManager
+import cn.arsenals.osarsenals.manager.OverviewViewManager
+import cn.arsenals.osarsenals.utils.Alog
+import cn.arsenals.osarsenals.utils.DeviceStatusUtil
+import cn.arsenals.osarsenals.views.FunctionView
+import cn.arsenals.osarsenals.views.OverviewView
+import cn.arsenals.osarsenals.views.SettingsView
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private val TAG = "OverviewView"

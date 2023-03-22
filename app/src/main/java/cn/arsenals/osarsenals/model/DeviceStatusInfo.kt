@@ -1,4 +1,4 @@
-package cn.arsneals.osarsenals.model
+package cn.arsenals.osarsenals.model
 
 class DeviceStatusInfo {
     var mCpuFreqList = ArrayList<Double>()

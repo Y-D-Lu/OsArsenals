@@ -1,4 +1,4 @@
-package cn.arsneals.osarsenals.views
+package cn.arsenals.osarsenals.views
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
-import cn.arsneals.osarsenals.utils.Alog
+import cn.arsenals.osarsenals.utils.Alog
 
 class PercentageRectView : View {
     private val TAG = "PercentageRectView"

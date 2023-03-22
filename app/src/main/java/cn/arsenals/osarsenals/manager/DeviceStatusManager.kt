@@ -1,8 +1,8 @@
-package cn.arsneals.osarsenals.manager
+package cn.arsenals.osarsenals.manager
 
-import cn.arsneals.osarsenals.model.DeviceStatusInfo
-import cn.arsneals.osarsenals.utils.Alog
-import cn.arsneals.osarsenals.utils.DeviceStatusUtil
+import cn.arsenals.osarsenals.model.DeviceStatusInfo
+import cn.arsenals.osarsenals.utils.Alog
+import cn.arsenals.osarsenals.utils.DeviceStatusUtil
 import java.util.*
 import kotlin.collections.ArrayList
 

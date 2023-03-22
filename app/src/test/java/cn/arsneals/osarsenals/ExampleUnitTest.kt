@@ -1,4 +1,4 @@
-package cn.arsneals.osarsenals
+package cn.arsenals.osarsenals
 
 import org.junit.Test
 

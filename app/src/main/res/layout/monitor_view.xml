@@ -13,7 +13,7 @@
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <cn.arsneals.osarsenals.views.PercentageRectView
+            <cn.arsenals.osarsenals.views.PercentageRectView
                 android:id="@+id/monitor_cpu_info_rect"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="8dp"
@@ -40,7 +40,7 @@
                 android:layout_height="36dp"
                 android:layout_alignParentTop="true">
 
-                <cn.arsneals.osarsenals.views.PercentageCircleView
+                <cn.arsenals.osarsenals.views.PercentageCircleView
                     android:id="@+id/monitor_gpu_info_circle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -74,7 +74,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_alignParentTop="true">
-                <cn.arsneals.osarsenals.views.PercentageCircleView
+                <cn.arsenals.osarsenals.views.PercentageCircleView
                     android:id="@+id/monitor_battery_info_circle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

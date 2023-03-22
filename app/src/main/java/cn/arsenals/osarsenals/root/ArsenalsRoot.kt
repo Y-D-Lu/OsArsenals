@@ -1,6 +1,6 @@
-package cn.arsneals.osarsenals.root
+package cn.arsenals.osarsenals.root
 
-import cn.arsneals.osarsenals.utils.Alog
+import cn.arsenals.osarsenals.utils.Alog
 import java.io.*
 
 class ArsenalsRoot {

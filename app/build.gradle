@@ -14,7 +14,7 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    namespace 'cn.arsneals.osarsenals'
+    namespace 'cn.arsenals.osarsenals'
     compileSdk 33
 
     signingConfigs {
@@ -27,7 +27,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "cn.arsneals.osarsenals"
+        applicationId "cn.arsenals.osarsenals"
         minSdk 33
         targetSdk 33
         versionCode 1

@@ -1,4 +1,4 @@
-package cn.arsneals.osarsenals.manager
+package cn.arsenals.osarsenals.manager
 
 import android.content.Context
 import android.graphics.PixelFormat
@@ -8,9 +8,9 @@ import android.os.HandlerThread
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.WindowManager
-import cn.arsneals.osarsenals.OsApplication
-import cn.arsneals.osarsenals.utils.Alog
-import cn.arsneals.osarsenals.views.MonitorView
+import cn.arsenals.osarsenals.OsApplication
+import cn.arsenals.osarsenals.utils.Alog
+import cn.arsenals.osarsenals.views.MonitorView
 
 class OverviewViewManager {
     private val TAG = "OverviewViewManager"

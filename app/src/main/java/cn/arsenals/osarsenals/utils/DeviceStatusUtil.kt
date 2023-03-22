@@ -1,7 +1,7 @@
-package cn.arsneals.osarsenals.utils
+package cn.arsenals.osarsenals.utils
 
-import cn.arsneals.osarsenals.jni.ArsenalsJni
-import cn.arsneals.osarsenals.root.ArsenalsRoot
+import cn.arsenals.osarsenals.jni.ArsenalsJni
+import cn.arsenals.osarsenals.root.ArsenalsRoot
 
 class DeviceStatusUtil {
     companion object {
