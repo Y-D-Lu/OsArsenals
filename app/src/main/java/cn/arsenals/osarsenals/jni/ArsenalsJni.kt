@@ -1,6 +1,13 @@
 package cn.arsenals.osarsenals.jni
 
 class ArsenalsJni {
+    companion object {
+        // Used to load the 'arsenalslib' library on application startup.
+        init {
+            System.loadLibrary("arsenalslib")
+        }
+    }
+
     /**
      * A native method that is implemented by the 'arsenalslib' native library,
      * which is packaged with this application.
@@ -14,11 +21,4 @@ class ArsenalsJni {
     external fun getCpuUtilizationStr(): String
 
     external fun getAioStatus(): String
-
-    companion object {
-        // Used to load the 'arsenalslib' library on application startup.
-        init {
-            System.loadLibrary("arsenalslib")
-        }
-    }
 }

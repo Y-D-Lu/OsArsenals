@@ -9,9 +9,12 @@ import cn.arsenals.osarsenals.R
 import cn.arsenals.osarsenals.utils.Alog
 
 class OverviewView : RelativeLayout {
-    private val TAG = "OverviewView"
-    private lateinit var mView: View
-    private lateinit var mMonitorView: MonitorView
+    companion object {
+        private const val TAG = "OverviewView"
+    }
+
+    private lateinit var view: View
+    private lateinit var monitorView: MonitorView
 
     constructor(context: Context) : super(context) {
         initView()
@@ -33,7 +36,7 @@ class OverviewView : RelativeLayout {
     private fun initView() {
         Alog.debug(TAG, "initView")
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        mView = inflater.inflate(R.layout.overview_view, this)
-//        mMonitorView = findViewById(R.id.overview_monitorview)
+        view = inflater.inflate(R.layout.overview_view, this)
+//        monitorView = findViewById(R.id.overview_monitorview)
     }
 }

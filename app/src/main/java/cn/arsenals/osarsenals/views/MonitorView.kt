@@ -13,73 +13,76 @@ import cn.arsenals.osarsenals.utils.Alog
 import kotlin.math.roundToInt
 
 class MonitorView : RelativeLayout {
-    private val TAG = "RelativeLayout"
-    private val mEachCpuUtilizationList = ArrayList<Int>()
+    companion object {
+        private const val TAG = "RelativeLayout"
+    }
 
-    private val mDeviceInfoCb = object : DeviceStatusManager.IDeviceInfoCb{
+    private val eachCpuUtilizationList = ArrayList<Int>()
+
+    private val deviceInfoCb = object : DeviceStatusManager.IDeviceInfoCb{
         override fun onDeviceInfoRefresh(info: DeviceStatusInfo) {
             Alog.verbose(TAG, "onDeviceInfoRefresh info $info")
             post {
-                if (mEachCpuUtilizationList.size != info.mCpuUtilizationList.size - 1) {
-                    mEachCpuUtilizationList.clear()
-                    for (i in 1 until info.mCpuUtilizationList.size) {
-                        mEachCpuUtilizationList.add(info.mCpuUtilizationList[i])
+                if (eachCpuUtilizationList.size != info.cpuUtilizationList.size - 1) {
+                    eachCpuUtilizationList.clear()
+                    for (i in 1 until info.cpuUtilizationList.size) {
+                        eachCpuUtilizationList.add(info.cpuUtilizationList[i])
                     }
                 } else {
-                    for (i in 0 until mEachCpuUtilizationList.size) {
-                        mEachCpuUtilizationList[i] = info.mCpuUtilizationList[i + 1]
+                    for (i in 0 until eachCpuUtilizationList.size) {
+                        eachCpuUtilizationList[i] = info.cpuUtilizationList[i + 1]
                     }
                 }
-                if (mCpuInfoRectView.updatePercentage(mEachCpuUtilizationList)) {
-                    mCpuInfoRectView.invalidate()
+                if (cpuInfoRectView.updatePercentage(eachCpuUtilizationList)) {
+                    cpuInfoRectView.invalidate()
                 }
-                if (mGpuInfoCircleView.updatePercentage(info.mGpuBusy)) {
-                    mGpuInfoCircleView.invalidate()
+                if (gpuInfoCircleView.updatePercentage(info.gpuBusy)) {
+                    gpuInfoCircleView.invalidate()
                 }
-                if (mBatteryInfoCircleView.updatePercentage(info.mBatteryCapacity)) {
-                    mBatteryInfoCircleView.invalidate()
+                if (batteryInfoCircleView.updatePercentage(info.batteryCapacity)) {
+                    batteryInfoCircleView.invalidate()
                 }
-                mCpuInfoTextView.text = "${info.mCpuTemp}℃"
-                mGpuInfoInnerTextView.text = "${info.mGpuBusy}%"
-                mGpuInfoTextView.text = "${info.mGpuFreq}MHz"
-                mBatteryInfoInnerTextView.text = "${info.mBatteryCapacity}%"
-                mBatteryInfoTextView.text = "${info.mBatteryTemp}℃"
+                cpuInfoTextView.text = "${info.cpuTemp}℃"
+                gpuInfoInnerTextView.text = "${info.gpuBusy}%"
+                gpuInfoTextView.text = "${info.gpuFreq}MHz"
+                batteryInfoInnerTextView.text = "${info.batteryCapacity}%"
+                batteryInfoTextView.text = "${info.batteryTemp}℃"
 
                 var cpuDetailText = ""
-                for (i in 0 until info.mTotalCpuCount) {
+                for (i in 0 until info.totalCpuCount) {
                     cpuDetailText += "#$i "
-                    if (!info.mCpuOnlineList[i]) {
+                    if (!info.cpuOnlineList[i]) {
                         cpuDetailText += "OFFLINE"
                     } else {
-                        cpuDetailText += "${info.mCpuFreqList[i].roundToInt()}MHz ${info.mCpuUtilizationList[i + 1]}%"
+                        cpuDetailText += "${info.cpuFreqList[i].roundToInt()}MHz ${info.cpuUtilizationList[i + 1]}%"
                     }
-                    if (i != info.mTotalCpuCount - 1) {
+                    if (i != info.totalCpuCount - 1) {
                         cpuDetailText += "\n"
                     }
                 }
-                mCpuDetailTextView.text = cpuDetailText
-                mFpsTextView.text = "FPS\n${info.mFps}"
-                mRamTextView.text = "RAM\n${info.mRamUtilization}%"
-                mCurrentTextView.text = "CUR\n${info.mBatteryCurrent}mA"
-                mPowerTextView.text = "PWR\n${String.format("%.2f", info.mBatteryPower)}W"
+                cpuDetailTextView.text = cpuDetailText
+                fpsTextView.text = "FPS\n${info.fps}"
+                ramTextView.text = "RAM\n${info.ramUtilization}%"
+                currentTextView.text = "CUR\n${info.batteryCurrent}mA"
+                powerTextView.text = "PWR\n${String.format("%.2f", info.batteryPower)}W"
             }
         }
     }
 
-    private lateinit var mView: View
-    private lateinit var mCpuInfoRectView: PercentageRectView
-    private lateinit var mCpuInfoTextView: TextView
-    private lateinit var mGpuInfoCircleView: PercentageCircleView
-    private lateinit var mGpuInfoInnerTextView: TextView
-    private lateinit var mGpuInfoTextView: TextView
-    private lateinit var mBatteryInfoCircleView: PercentageCircleView
-    private lateinit var mBatteryInfoInnerTextView: TextView
-    private lateinit var mBatteryInfoTextView: TextView
-    private lateinit var mCpuDetailTextView: TextView
-    private lateinit var mFpsTextView: TextView
-    private lateinit var mRamTextView: TextView
-    private lateinit var mCurrentTextView: TextView
-    private lateinit var mPowerTextView: TextView
+    private lateinit var view: View
+    private lateinit var cpuInfoRectView: PercentageRectView
+    private lateinit var cpuInfoTextView: TextView
+    private lateinit var gpuInfoCircleView: PercentageCircleView
+    private lateinit var gpuInfoInnerTextView: TextView
+    private lateinit var gpuInfoTextView: TextView
+    private lateinit var batteryInfoCircleView: PercentageCircleView
+    private lateinit var batteryInfoInnerTextView: TextView
+    private lateinit var batteryInfoTextView: TextView
+    private lateinit var cpuDetailTextView: TextView
+    private lateinit var fpsTextView: TextView
+    private lateinit var ramTextView: TextView
+    private lateinit var currentTextView: TextView
+    private lateinit var powerTextView: TextView
 
     constructor(context: Context) : super(context) {
         initView()
@@ -101,28 +104,28 @@ class MonitorView : RelativeLayout {
     private fun initView() {
         Alog.debug(TAG, "initView")
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        mView = inflater.inflate(R.layout.monitor_view, this)
+        view = inflater.inflate(R.layout.monitor_view, this)
 
-        mCpuInfoRectView = findViewById(R.id.monitor_cpu_info_rect)
-        mCpuInfoTextView = findViewById(R.id.monitor_cpu_info_text)
-        mGpuInfoCircleView = findViewById(R.id.monitor_gpu_info_circle)
-        mGpuInfoInnerTextView = findViewById(R.id.monitor_gpu_info_inner_text)
-        mGpuInfoTextView = findViewById(R.id.monitor_gpu_info_text)
-        mBatteryInfoCircleView = findViewById(R.id.monitor_battery_info_circle)
-        mBatteryInfoInnerTextView = findViewById(R.id.monitor_battery_info_inner)
-        mBatteryInfoTextView = findViewById(R.id.monitor_battery_info_text)
+        cpuInfoRectView = findViewById(R.id.monitor_cpu_info_rect)
+        cpuInfoTextView = findViewById(R.id.monitor_cpu_info_text)
+        gpuInfoCircleView = findViewById(R.id.monitor_gpu_info_circle)
+        gpuInfoInnerTextView = findViewById(R.id.monitor_gpu_info_inner_text)
+        gpuInfoTextView = findViewById(R.id.monitor_gpu_info_text)
+        batteryInfoCircleView = findViewById(R.id.monitor_battery_info_circle)
+        batteryInfoInnerTextView = findViewById(R.id.monitor_battery_info_inner)
+        batteryInfoTextView = findViewById(R.id.monitor_battery_info_text)
 
-        mCpuDetailTextView = findViewById(R.id.monitor_cpu_detail_text)
-        mFpsTextView = findViewById(R.id.monitor_fps_text)
-        mRamTextView = findViewById(R.id.monitor_ram_text)
-        mCurrentTextView = findViewById(R.id.monitor_cur_text)
-        mPowerTextView = findViewById(R.id.monitor_pwr_text)
+        cpuDetailTextView = findViewById(R.id.monitor_cpu_detail_text)
+        fpsTextView = findViewById(R.id.monitor_fps_text)
+        ramTextView = findViewById(R.id.monitor_ram_text)
+        currentTextView = findViewById(R.id.monitor_cur_text)
+        powerTextView = findViewById(R.id.monitor_pwr_text)
 
-        DeviceStatusManager.getInstance().registerDeviceInfoCb(mDeviceInfoCb)
+        DeviceStatusManager.getInstance().registerDeviceInfoCb(deviceInfoCb)
     }
 
     private fun deinitView() {
-        DeviceStatusManager.getInstance().unregisterDeviceInfoCb(mDeviceInfoCb)
+        DeviceStatusManager.getInstance().unregisterDeviceInfoCb(deviceInfoCb)
     }
 
     private fun updateViewInfo() {

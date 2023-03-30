@@ -7,8 +7,9 @@ import cn.arsenals.osarsenals.manager.OverviewViewManager
 import cn.arsenals.osarsenals.utils.Alog
 
 class OsApplication: Application() {
-    val TAG = "OsApplication"
     companion object {
+        private const val TAG = "OsApplication"
+
         lateinit var application: Application
     }
 

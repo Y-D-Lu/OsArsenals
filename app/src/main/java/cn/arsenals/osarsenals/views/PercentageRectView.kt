@@ -9,13 +9,15 @@ import android.view.View
 import cn.arsenals.osarsenals.utils.Alog
 
 class PercentageRectView : View {
-    private val TAG = "PercentageRectView"
+    companion object {
+        private const val TAG = "PercentageRectView"
+    }
 
-    private val mRectBackgroundPaint = Paint()
-    private val mRectPaint = Paint()
+    private val rectBackgroundPaint = Paint()
+    private val rectPaint = Paint()
 
-    private val mRectList: ArrayList<Rect> = ArrayList()
-    private val mBackgroundRectList: ArrayList<Rect> = ArrayList()
+    private val rectList: ArrayList<Rect> = ArrayList()
+    private val backgroundRectList: ArrayList<Rect> = ArrayList()
 
     constructor(context: Context) : super(context) {
         initView()
@@ -40,10 +42,10 @@ class PercentageRectView : View {
     }
 
     private fun initPaint() {
-        mRectBackgroundPaint.isAntiAlias = true
-        mRectBackgroundPaint.color = 0x4D000000
-        mRectPaint.isAntiAlias = true
-        mRectPaint.color = 0x4D00FFFF
+        rectBackgroundPaint.isAntiAlias = true
+        rectBackgroundPaint.color = 0x4D000000
+        rectPaint.isAntiAlias = true
+        rectPaint.color = 0x4D00FFFF
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -58,38 +60,38 @@ class PercentageRectView : View {
             return
         }
 
-        if (mRectList.isEmpty()) {
+        if (rectList.isEmpty()) {
             Alog.warn(TAG, "onDraw mRectList is empty, return!")
             return
         }
 
-        for (rect in mBackgroundRectList) {
-            canvas.drawRect(rect, mRectBackgroundPaint)
+        for (rect in backgroundRectList) {
+            canvas.drawRect(rect, rectBackgroundPaint)
         }
-        for (rect in mRectList) {
-            canvas.drawRect(rect, mRectPaint)
+        for (rect in rectList) {
+            canvas.drawRect(rect, rectPaint)
         }
     }
 
     fun updatePercentage(list: ArrayList<Int>): Boolean {
-        if (mRectList.size != list.size) {
-            mRectList.clear()
+        if (rectList.size != list.size) {
+            rectList.clear()
             val rectHeight = height
             val rectWidth = (width.toDouble() / list.size).toInt()
             for (i in 0 until list.size) {
-                mRectList.add(Rect(rectWidth * i, 0, rectWidth * (i + 1), rectHeight))
+                rectList.add(Rect(rectWidth * i, 0, rectWidth * (i + 1), rectHeight))
             }
         }
-        if (mBackgroundRectList.size != list.size) {
-            mBackgroundRectList.clear()
+        if (backgroundRectList.size != list.size) {
+            backgroundRectList.clear()
             val rectHeight = height
             val rectWidth = (width.toDouble() / list.size).toInt()
             for (i in 0 until list.size) {
-                mBackgroundRectList.add(Rect(rectWidth * i, 0, rectWidth * (i + 1), rectHeight))
+                backgroundRectList.add(Rect(rectWidth * i, 0, rectWidth * (i + 1), rectHeight))
             }
         }
         for (i in 0 until list.size) {
-            mRectList[i].top = height - (height * list[i] / 100)
+            rectList[i].top = height - (height * list[i] / 100)
         }
         return true
     }

@@ -9,8 +9,11 @@ import cn.arsenals.osarsenals.R
 import cn.arsenals.osarsenals.utils.Alog
 
 class FunctionView : RelativeLayout {
-    private val TAG = "FunctionView"
-    private lateinit var mView: View
+    companion object {
+        private const val TAG = "FunctionView"
+    }
+
+    private lateinit var view: View
 
     constructor(context: Context) : super(context) {
         initView()
@@ -32,6 +35,6 @@ class FunctionView : RelativeLayout {
     private fun initView() {
         Alog.debug(TAG, "initView")
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        mView = inflater.inflate(R.layout.function_view, this)
+        view = inflater.inflate(R.layout.function_view, this)
     }
 }

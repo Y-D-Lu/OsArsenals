@@ -5,7 +5,7 @@ import cn.arsenals.osarsenals.root.ArsenalsRoot
 
 class DeviceStatusUtil {
     companion object {
-        val TAG = "DeviceStatusUtil"
+        private const val TAG = "DeviceStatusUtil"
 
         fun getAioStatus(): String {
             return ArsenalsJni().getAioStatus()

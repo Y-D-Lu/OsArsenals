@@ -3,51 +3,52 @@ package cn.arsenals.osarsenals.manager
 import cn.arsenals.osarsenals.model.DeviceStatusInfo
 import cn.arsenals.osarsenals.utils.Alog
 import cn.arsenals.osarsenals.utils.DeviceStatusUtil
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 import kotlin.collections.ArrayList
 
 class DeviceStatusManager {
-    private val TAG = "DeviceStatusManager"
-
-    private val mDeviceStatusInfo = DeviceStatusInfo()
-
-    private val mCpuFreqList = ArrayList<Double>()
-    private val mCpuOnlineList = ArrayList<Boolean>()
-    private val mCpuUtilizationList = ArrayList<Int>()
-    private val mCpuLastTotalTimeList = ArrayList<Int>()
-    private val mCpuLastIdleTimeList = ArrayList<Int>()
-
-    private var mTimer : Timer? = null
-    private var mRef = 0
-
-    private var mTotalCpuCount = DeviceStatusUtil.getTotalCpuCount()
-    private var mCpuTemp = 0.0
-    private var mGpuFreq = 0
-    private var mGpuBusy = 0
-    private var mCpuUtilization = 0.0
-    private var mBatteryCapacity = 0
-    private var mBatteryTemp = 0
-    private var mFps = 0.0
-    private var mTotalRam = 0
-    private var mAvailableRam = 0
-    private var mRamUtilization = 0
-    private var mBatteryCurrent = 0
-    private var mBatteryVoltage = 0
-    private var mBatteryPower = 0.0
-
-    private var mDeviceInfoCbList = ArrayList<IDeviceInfoCb>()
-
     companion object {
-        fun getInstance() = Instance.sInstance
+        private const val TAG = "DeviceStatusManager"
+
+        fun getInstance() = Instance.instance
     }
 
     object Instance {
-        val sInstance = DeviceStatusManager()
+        val instance = DeviceStatusManager()
     }
 
     interface IDeviceInfoCb {
         fun onDeviceInfoRefresh(info: DeviceStatusInfo)
     }
+
+    private val deviceStatusInfo = DeviceStatusInfo()
+
+    private val cpuFreqList = ArrayList<Double>()
+    private val cpuOnlineList = ArrayList<Boolean>()
+    private val cpuUtilizationList = ArrayList<Int>()
+    private val cpuLastTotalTimeList = ArrayList<Int>()
+    private val cpuLastIdleTimeList = ArrayList<Int>()
+
+    private var timer : Timer? = null
+    private var ref = 0
+
+    private var totalCpuCount = DeviceStatusUtil.getTotalCpuCount()
+    private var cpuTemp = 0.0
+    private var gpuFreq = 0
+    private var gpuBusy = 0
+    private var cpuUtilization = 0.0
+    private var batteryCapacity = 0
+    private var batteryTemp = 0
+    private var fps = 0.0
+    private var totalRam = 0
+    private var availableRam = 0
+    private var ramUtilization = 0
+    private var batteryCurrent = 0
+    private var batteryVoltage = 0
+    private var batteryPower = 0.0
+
+    private var deviceInfoCbList = ArrayList<IDeviceInfoCb>()
 
     fun init() {
         Alog.info(TAG, "DeviceStatusManager init")
@@ -60,12 +61,12 @@ class DeviceStatusManager {
     }
 
     private fun startTimer() {
-        mRef++
-        mTimer?.let {
+        ref++
+        timer?.let {
             Alog.warn(TAG, "startTimer mTimer not null, not start")
         } ?: let {
-            mTimer = Timer()
-            mTimer!!.schedule(object : TimerTask() {
+            timer = Timer()
+            timer!!.schedule(object : TimerTask() {
                 override fun run() {
                     onTimerScheduled()
                 }
@@ -74,56 +75,56 @@ class DeviceStatusManager {
     }
 
     private fun stopTimer() {
-        mRef--
-        if (mRef <= 0) {
-            mTimer?.cancel()
-            mTimer = null
+        ref--
+        if (ref <= 0) {
+            timer?.cancel()
+            timer = null
         }
     }
 
     fun registerDeviceInfoCb(cb: IDeviceInfoCb) {
-        if (mDeviceInfoCbList.contains(cb)) {
+        if (deviceInfoCbList.contains(cb)) {
             Alog.warn(TAG, "registerDeviceInfoCb mDeviceInfoCbList contains $cb, return!")
             return
         }
-        mDeviceInfoCbList.add(cb)
+        deviceInfoCbList.add(cb)
     }
 
     fun unregisterDeviceInfoCb(cb: IDeviceInfoCb) {
-        if (!mDeviceInfoCbList.contains(cb)) {
+        if (!deviceInfoCbList.contains(cb)) {
             Alog.warn(TAG, "unregisterDeviceInfoCb mDeviceInfoCbList !contains $cb, return!")
             return
         }
-        mDeviceInfoCbList.remove(cb)
+        deviceInfoCbList.remove(cb)
     }
 
     private fun onTimerScheduled() {
-        mTotalCpuCount = DeviceStatusUtil.getTotalCpuCount()
-        if (mCpuFreqList.size != mTotalCpuCount) {
-            mCpuFreqList.clear()
-            for (i in 0 until mTotalCpuCount) {
-                mCpuFreqList.add(DeviceStatusUtil.getCurrentCpuFreq(i))
+        totalCpuCount = DeviceStatusUtil.getTotalCpuCount()
+        if (cpuFreqList.size != totalCpuCount) {
+            cpuFreqList.clear()
+            for (i in 0 until totalCpuCount) {
+                cpuFreqList.add(DeviceStatusUtil.getCurrentCpuFreq(i))
             }
         } else {
-            for (i in 0 until mTotalCpuCount) {
-                mCpuFreqList[i] = DeviceStatusUtil.getCurrentCpuFreq(i)
+            for (i in 0 until totalCpuCount) {
+                cpuFreqList[i] = DeviceStatusUtil.getCurrentCpuFreq(i)
             }
         }
 
         var availableCpuCount = 0
-        if (mCpuOnlineList.size != mTotalCpuCount) {
-            mCpuOnlineList.clear()
-            for (i in 0 until mTotalCpuCount) {
+        if (cpuOnlineList.size != totalCpuCount) {
+            cpuOnlineList.clear()
+            for (i in 0 until totalCpuCount) {
                 val isOnline = DeviceStatusUtil.isCpuOnline(i)
-                mCpuOnlineList.add(isOnline)
+                cpuOnlineList.add(isOnline)
                 if (isOnline) {
                     availableCpuCount++
                 }
             }
         } else {
-            for (i in 0 until mTotalCpuCount) {
+            for (i in 0 until totalCpuCount) {
                 val isOnline = DeviceStatusUtil.isCpuOnline(i)
-                mCpuOnlineList[i] = DeviceStatusUtil.isCpuOnline(i)
+                cpuOnlineList[i] = DeviceStatusUtil.isCpuOnline(i)
                 if (isOnline) {
                     availableCpuCount++
                 }
@@ -136,25 +137,25 @@ class DeviceStatusManager {
         val listSize = availableCpuCount + 1
         if (cpuUtilizationStrList.size == listSize * 2) {
             try {
-                if (mCpuLastTotalTimeList.size != listSize
-                    || mCpuLastIdleTimeList.size != listSize || mCpuUtilizationList.size != listSize) {
-                    mCpuLastTotalTimeList.clear()
-                    mCpuLastIdleTimeList.clear()
-                    mCpuUtilizationList.clear()
+                if (cpuLastTotalTimeList.size != listSize
+                    || cpuLastIdleTimeList.size != listSize || cpuUtilizationList.size != listSize) {
+                    cpuLastTotalTimeList.clear()
+                    cpuLastIdleTimeList.clear()
+                    cpuUtilizationList.clear()
                     for (i in 0 until  listSize) {
                         val totalTime = cpuUtilizationStrList[i * 2 + 1].toInt()
                         val idleTime = cpuUtilizationStrList[i * 2].toInt()
-                        mCpuLastTotalTimeList.add(totalTime)
-                        mCpuLastIdleTimeList.add(idleTime)
-                        mCpuUtilizationList.add(0)
+                        cpuLastTotalTimeList.add(totalTime)
+                        cpuLastIdleTimeList.add(idleTime)
+                        cpuUtilizationList.add(0)
                     }
                 } else {
                     for (i in 0 until  listSize) {
                         val totalTime = cpuUtilizationStrList[i * 2 + 1].toInt()
                         val idleTime = cpuUtilizationStrList[i * 2].toInt()
-                        mCpuUtilizationList[i] = 100 - (idleTime - mCpuLastIdleTimeList[i]) * 100 / (totalTime - mCpuLastTotalTimeList[i])
-                        mCpuLastTotalTimeList[i] = totalTime
-                        mCpuLastIdleTimeList[i] = idleTime
+                        cpuUtilizationList[i] = 100 - (idleTime - cpuLastIdleTimeList[i]) * 100 / (totalTime - cpuLastTotalTimeList[i])
+                        cpuLastTotalTimeList[i] = totalTime
+                        cpuLastIdleTimeList[i] = idleTime
                     }
                 }
             } catch (ex: NumberFormatException) {
@@ -166,24 +167,24 @@ class DeviceStatusManager {
                     " size ${cpuUtilizationStrList.size} not equals availableCpuCount $availableCpuCount")
         }
 
-        mCpuTemp = DeviceStatusUtil.getCpuTemperature()
-        mGpuFreq = DeviceStatusUtil.getCurrentGpuFreq()
-        mGpuBusy = DeviceStatusUtil.getGpuBusy()
+        cpuTemp = DeviceStatusUtil.getCpuTemperature()
+        gpuFreq = DeviceStatusUtil.getCurrentGpuFreq()
+        gpuBusy = DeviceStatusUtil.getGpuBusy()
 
-        mFps = DeviceStatusUtil.getCurrentFps()
+        fps = DeviceStatusUtil.getCurrentFps()
 
-        mBatteryCapacity = DeviceStatusUtil.getBatteryCapacity()
-        mBatteryCurrent = DeviceStatusUtil.getBatteryCurrent()
-        mBatteryVoltage = DeviceStatusUtil.getBatteryVoltage()
-        mBatteryPower = mBatteryVoltage * mBatteryCurrent / 1000000.0
-        mBatteryTemp = DeviceStatusUtil.getBatteryTemperature()
+        batteryCapacity = DeviceStatusUtil.getBatteryCapacity()
+        batteryCurrent = DeviceStatusUtil.getBatteryCurrent()
+        batteryVoltage = DeviceStatusUtil.getBatteryVoltage()
+        batteryPower = batteryVoltage * batteryCurrent / 1000000.0
+        batteryTemp = DeviceStatusUtil.getBatteryTemperature()
 
-        mAvailableRam = DeviceStatusUtil.getAvailableMemory()
-        mTotalRam = DeviceStatusUtil.getTotalMemory()
-        if (mTotalRam != 0) {
-            mRamUtilization = (100.0 - mAvailableRam * 100.0 / mTotalRam).toInt()
+        availableRam = DeviceStatusUtil.getAvailableMemory()
+        totalRam = DeviceStatusUtil.getTotalMemory()
+        if (totalRam != 0) {
+            ramUtilization = (100.0 - availableRam * 100.0 / totalRam).toInt()
         } else {
-            mRamUtilization = 0
+            ramUtilization = 0
         }
 
 //        Alog.verbose(TAG, "onTimerScheduled mTotalCpuCount $mTotalCpuCount\n" +
@@ -193,26 +194,26 @@ class DeviceStatusManager {
 //            " mBatteryVoltage $mBatteryVoltage mBatteryPower $mBatteryPower mBatteryTemp $mBatteryTemp\n" +
 //            " mAvailableRam $mAvailableRam mTotalRam $mTotalRam mRamUtilization $mRamUtilization")
 
-        mDeviceStatusInfo.mCpuFreqList = mCpuFreqList
-        mDeviceStatusInfo.mCpuOnlineList = mCpuOnlineList
-        mDeviceStatusInfo.mCpuUtilizationList = mCpuUtilizationList
-        mDeviceStatusInfo.mTotalCpuCount = mTotalCpuCount
-        mDeviceStatusInfo.mCpuTemp = mCpuTemp
-        mDeviceStatusInfo.mGpuFreq = mGpuFreq
-        mDeviceStatusInfo.mGpuBusy = mGpuBusy
-        mDeviceStatusInfo.mCpuUtilization = mCpuUtilization
-        mDeviceStatusInfo.mBatteryCapacity = mBatteryCapacity
-        mDeviceStatusInfo.mBatteryTemp = mBatteryTemp
-        mDeviceStatusInfo.mFps = mFps
-        mDeviceStatusInfo.mTotalRam = mTotalRam
-        mDeviceStatusInfo.mAvailableRam = mAvailableRam
-        mDeviceStatusInfo.mRamUtilization = mRamUtilization
-        mDeviceStatusInfo.mBatteryCurrent = mBatteryCurrent
-        mDeviceStatusInfo.mBatteryVoltage = mBatteryVoltage
-        mDeviceStatusInfo.mBatteryPower = mBatteryPower
+        deviceStatusInfo.cpuFreqList = cpuFreqList
+        deviceStatusInfo.cpuOnlineList = cpuOnlineList
+        deviceStatusInfo.cpuUtilizationList = cpuUtilizationList
+        deviceStatusInfo.totalCpuCount = totalCpuCount
+        deviceStatusInfo.cpuTemp = cpuTemp
+        deviceStatusInfo.gpuFreq = gpuFreq
+        deviceStatusInfo.gpuBusy = gpuBusy
+        deviceStatusInfo.cpuUtilization = cpuUtilization
+        deviceStatusInfo.batteryCapacity = batteryCapacity
+        deviceStatusInfo.batteryTemp = batteryTemp
+        deviceStatusInfo.fps = fps
+        deviceStatusInfo.totalRam = totalRam
+        deviceStatusInfo.availableRam = availableRam
+        deviceStatusInfo.ramUtilization = ramUtilization
+        deviceStatusInfo.batteryCurrent = batteryCurrent
+        deviceStatusInfo.batteryVoltage = batteryVoltage
+        deviceStatusInfo.batteryPower = batteryPower
 
-        for (cb in mDeviceInfoCbList) {
-            cb.onDeviceInfoRefresh(mDeviceStatusInfo)
+        for (cb in deviceInfoCbList) {
+            cb.onDeviceInfoRefresh(deviceStatusInfo)
         }
     }
 }

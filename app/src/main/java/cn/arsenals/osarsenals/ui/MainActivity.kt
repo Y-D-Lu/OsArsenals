@@ -9,42 +9,43 @@ import android.widget.Button
 import android.widget.RelativeLayout
 import cn.arsenals.osarsenals.R
 import cn.arsenals.osarsenals.jni.ArsenalsJni
-import cn.arsenals.osarsenals.manager.DeviceStatusManager
 import cn.arsenals.osarsenals.manager.OverviewViewManager
 import cn.arsenals.osarsenals.utils.Alog
-import cn.arsenals.osarsenals.utils.DeviceStatusUtil
 import cn.arsenals.osarsenals.views.FunctionView
 import cn.arsenals.osarsenals.views.OverviewView
 import cn.arsenals.osarsenals.views.SettingsView
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
-    private val TAG = "OverviewView"
-    private lateinit var mMainRelativelayout: RelativeLayout
-    private lateinit var mOverviewView: OverviewView
-    private lateinit var mFunctionView: FunctionView
-    private lateinit var mSettingsView: SettingsView
-    private lateinit var mFunctionBtn: Button
-    private lateinit var mOverviewBtn: Button
-    private lateinit var mSettingsBtn: Button
-    private lateinit var mCurrentView: RelativeLayout
+    companion object {
+        private const val TAG = "OverviewView"
+    }
+
+    private lateinit var mainRelativelayout: RelativeLayout
+    private lateinit var overviewView: OverviewView
+    private lateinit var functionView: FunctionView
+    private lateinit var settingsView: SettingsView
+    private lateinit var functionBtn: Button
+    private lateinit var overviewBtn: Button
+    private lateinit var settingsBtn: Button
+    private lateinit var currentView: RelativeLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mMainRelativelayout = findViewById(R.id.mainRelativelayout)
-        mFunctionBtn = findViewById(R.id.mainFunctionBtn)
-        mFunctionBtn.setOnClickListener(this)
-        mOverviewBtn = findViewById(R.id.mainOverviewBtn)
-        mOverviewBtn.setOnClickListener(this)
-        mSettingsBtn = findViewById(R.id.mainSettingsBtn)
-        mSettingsBtn.setOnClickListener(this)
+        mainRelativelayout = findViewById(R.id.mainRelativelayout)
+        functionBtn = findViewById(R.id.mainFunctionBtn)
+        functionBtn.setOnClickListener(this)
+        overviewBtn = findViewById(R.id.mainOverviewBtn)
+        overviewBtn.setOnClickListener(this)
+        settingsBtn = findViewById(R.id.mainSettingsBtn)
+        settingsBtn.setOnClickListener(this)
 
-        mOverviewView = OverviewView(this)
-        mFunctionView = FunctionView(this)
-        mSettingsView = SettingsView(this)
-        mMainRelativelayout.addView(mOverviewView)
-        mCurrentView = mOverviewView
+        overviewView = OverviewView(this)
+        functionView = FunctionView(this)
+        settingsView = SettingsView(this)
+        mainRelativelayout.addView(overviewView)
+        currentView = overviewView
 
         Alog.verbose(TAG, "onCreate : " + ArsenalsJni().stringFromJNI("Hello world"))
     }
@@ -63,28 +64,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when(view) {
-            mFunctionBtn->{
-                Alog.info(TAG, "onClick on functionBtn currentView $mCurrentView")
-                if (mCurrentView != mFunctionView) {
-                    mMainRelativelayout.removeView(mCurrentView)
-                    mMainRelativelayout.addView(mFunctionView)
-                    mCurrentView = mFunctionView
+            functionBtn->{
+                Alog.info(TAG, "onClick on functionBtn currentView $currentView")
+                if (currentView != functionView) {
+                    mainRelativelayout.removeView(currentView)
+                    mainRelativelayout.addView(functionView)
+                    currentView = functionView
                 }
             }
-            mOverviewBtn->{
-                Alog.info(TAG, "onClick on overviewBtn currentView $mCurrentView")
-                if (mCurrentView != mOverviewView) {
-                    mMainRelativelayout.removeView(mCurrentView)
-                    mMainRelativelayout.addView(mOverviewView)
-                    mCurrentView = mOverviewView
+            overviewBtn->{
+                Alog.info(TAG, "onClick on overviewBtn currentView $currentView")
+                if (currentView != overviewView) {
+                    mainRelativelayout.removeView(currentView)
+                    mainRelativelayout.addView(overviewView)
+                    currentView = overviewView
                 }
             }
-            mSettingsBtn->{
-                Alog.info(TAG, "onClick on settingsBtn currentView $mCurrentView")
-                if (mCurrentView != mSettingsView) {
-                    mMainRelativelayout.removeView(mCurrentView)
-                    mMainRelativelayout.addView(mSettingsView)
-                    mCurrentView = mSettingsView
+            settingsBtn->{
+                Alog.info(TAG, "onClick on settingsBtn currentView $currentView")
+                if (currentView != settingsView) {
+                    mainRelativelayout.removeView(currentView)
+                    mainRelativelayout.addView(settingsView)
+                    currentView = settingsView
                 }
             }
             else->{

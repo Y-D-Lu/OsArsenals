@@ -9,7 +9,9 @@ import android.view.View
 import cn.arsenals.osarsenals.utils.Alog
 
 class PercentageCircleView : View {
-    private val TAG = "PercentageCircleView"
+    companion object {
+        private const val TAG = "PercentageCircleView"
+    }
 
     private val mCircleRectF: RectF = RectF()
     private val mCircleBackgroundPaint = Paint()
