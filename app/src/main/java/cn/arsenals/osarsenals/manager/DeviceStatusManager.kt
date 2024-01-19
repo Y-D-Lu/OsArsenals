@@ -52,15 +52,13 @@ class DeviceStatusManager {
 
     fun init() {
         Alog.info(TAG, "DeviceStatusManager init")
-        startTimer()
     }
 
     fun uninit() {
         Alog.info(TAG, "DeviceStatusManager uninit")
-        stopTimer()
     }
 
-    private fun startTimer() {
+    fun startTimer() {
         ref++
         timer?.let {
             Alog.warn(TAG, "startTimer mTimer not null, not start")
@@ -74,7 +72,7 @@ class DeviceStatusManager {
         }
     }
 
-    private fun stopTimer() {
+    fun stopTimer() {
         ref--
         if (ref <= 0) {
             timer?.cancel()
