@@ -1,10 +1,18 @@
 package cn.arsenals.osarsenals.manager;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
+
+import cn.arsenals.osarsenals.OsApplication;
 import cn.arsenals.osarsenals.model.DeviceStatusInfo;
 import cn.arsenals.osarsenals.utils.Alog;
+import cn.arsenals.osarsenals.utils.Constants;
 import cn.arsenals.osarsenals.utils.DeviceStatusUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,6 +31,8 @@ public class DeviceStatusManager {
         void onDeviceInfoRefresh(DeviceStatusInfo info);
     }
 
+    private BatteryManager mBatteryStatusManager = (BatteryManager) OsApplication.application.getSystemService(Context.BATTERY_SERVICE);
+
     private DeviceStatusInfo deviceStatusInfo = new DeviceStatusInfo();
 
     private ArrayList<Double> cpuFreqList = new ArrayList<Double>();
@@ -40,7 +50,7 @@ public class DeviceStatusManager {
     private int gpuBusy = 0;
     private double cpuUtilization = 0.0;
     private int batteryCapacity = 0;
-    private int batteryTemp = 0;
+    private double batteryTemp = 0.0;
     private double fps = 0.0;
     private int totalRam = 0;
     private int availableRam = 0;
@@ -163,8 +173,8 @@ public class DeviceStatusManager {
             }
         } else {
             Alog.warn(TAG,
-                    "cpuUtilizationStrList " + cpuUtilizationStrList +
-                            " size " + cpuUtilizationStrList.length + "not equals availableCpuCount " + availableCpuCount);
+                    "cpuUtilizationStrList " + Arrays.toString(cpuUtilizationStrList) +
+                            " size " + cpuUtilizationStrList.length + " not equals availableCpuCount " + availableCpuCount);
         }
 
         cpuTemp = DeviceStatusUtil.getCpuTemperature();
@@ -174,10 +184,26 @@ public class DeviceStatusManager {
         fps = DeviceStatusUtil.getCurrentFps();
 
         batteryCapacity = DeviceStatusUtil.getBatteryCapacity();
+        if (batteryCapacity == Constants.INVALID_VALUE) {
+            batteryCapacity = mBatteryStatusManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        }
         batteryCurrent = DeviceStatusUtil.getBatteryCurrent();
+        if (batteryCurrent == Constants.INVALID_VALUE) {
+            batteryCurrent = mBatteryStatusManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW) / 1000;
+        }
         batteryVoltage = DeviceStatusUtil.getBatteryVoltage();
+        if (batteryVoltage == Constants.INVALID_VALUE) {
+            Intent batteryIntent = OsApplication.application.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+            batteryVoltage = batteryIntent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, Constants.INVALID_VALUE);
+        }
+
         batteryPower = batteryVoltage * batteryCurrent / 1000000.0;
+
         batteryTemp = DeviceStatusUtil.getBatteryTemperature();
+        if (batteryTemp == Constants.INVALID_VALUE) {
+            Intent batteryIntent = OsApplication.application.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+            batteryTemp = batteryIntent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, Constants.INVALID_VALUE) / 10.0;
+        }
 
         availableRam = DeviceStatusUtil.getAvailableMemory();
         totalRam = DeviceStatusUtil.getTotalMemory();

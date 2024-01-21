@@ -71,7 +71,11 @@ public class MonitorView extends RelativeLayout {
                     fpsTextView.setText("FPS\n" + info.fps);
                     ramTextView.setText("RAM\n" + info.ramUtilization + "%");
                     currentTextView.setText("CUR\n" + info.batteryCurrent + "mA");
-                    powerTextView.setText("PWR\n" + String.format(" % .2f ", info.batteryPower) + "W");
+                    if (info.batteryPower > 0) {
+                        powerTextView.setText("PWR\n" + String.format(" % .2f ", info.batteryPower) + "W");
+                    } else {
+                        powerTextView.setText("CHG\n" + String.format(" % .2f ", -info.batteryPower) + "W");
+                    }
                 }
             });
         }

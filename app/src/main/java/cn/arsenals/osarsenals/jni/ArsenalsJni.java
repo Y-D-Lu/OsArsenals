@@ -14,4 +14,6 @@ public class ArsenalsJni {
     public static native String getCpuUtilizationStr();
 
     public static native String getAioStatus();
+
+    public static native String getHighestTemperature();
 }

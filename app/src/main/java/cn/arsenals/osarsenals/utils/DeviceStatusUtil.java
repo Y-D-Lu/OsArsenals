@@ -11,7 +11,7 @@ public class DeviceStatusUtil {
     }
 
     public static int getTotalCpuCount() {
-        int ret = 0;
+        int ret = Constants.INVALID_VALUE;
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromFile("/sys/devices/system/cpu/present").split("-")[1]) + 1;
         } catch (NumberFormatException ex) {
@@ -46,11 +46,24 @@ public class DeviceStatusUtil {
         } catch (NumberFormatException ex) {
             Alog.warn(TAG, "getBatteryCapacity NumberFormatException");
         }
+        if (ret < 0) {
+            return getHighestTemperature();
+        }
+        return ret;
+    }
+
+    public static double getHighestTemperature() {
+        double ret = 0.0;
+        try {
+            ret = Double.parseDouble(ArsenalsJni.getHighestTemperature()) / 1000.0;
+        } catch (NumberFormatException ex) {
+            Alog.warn(TAG, "getBatteryCapacity NumberFormatException");
+        }
         return ret;
     }
 
     public static int getCurrentGpuFreq() {
-        int ret = 0;
+        int ret = Constants.INVALID_VALUE;
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromFile("/sys/class/kgsl/kgsl-3d0/gpuclk")) / 1000000;
         } catch (NumberFormatException ex) {
@@ -60,7 +73,7 @@ public class DeviceStatusUtil {
     }
 
     public static int getGpuBusy() {
-        int ret = 0;
+        int ret = Constants.INVALID_VALUE;
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromFile("/sys/class/kgsl/kgsl-3d0/gpu_busy_percentage"));
         } catch (NumberFormatException ex) {
@@ -81,7 +94,7 @@ public class DeviceStatusUtil {
     }
 
     public static int getBatteryVoltage() {
-        int ret = 0;
+        int ret = Constants.INVALID_VALUE;
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromFile(
                     "/sys/class/power_supply/battery/voltage_now")) / 1000;
@@ -92,7 +105,7 @@ public class DeviceStatusUtil {
     }
 
     public static int getBatteryCurrent() {
-        int ret = 0;
+        int ret = Constants.INVALID_VALUE;
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromFile(
                     "/sys/class/power_supply/battery/current_now")) / 1000;
@@ -103,7 +116,7 @@ public class DeviceStatusUtil {
     }
 
     public static int getBatteryCapacity() {
-        int ret = 100;
+        int ret = Constants.INVALID_VALUE;
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromFile(
                     "/sys/class/power_supply/battery/capacity"));
@@ -114,7 +127,7 @@ public class DeviceStatusUtil {
     }
 
     public static int getBatteryTemperature() {
-        int ret = 0;
+        int ret = Constants.INVALID_VALUE;
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromFile(
                     "/sys/class/power_supply/battery/temp")) / 10;
@@ -136,7 +149,7 @@ public class DeviceStatusUtil {
     }
 
     public static int getAvailableMemory() {
-        int ret = 0;
+        int ret = Constants.INVALID_VALUE;
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromCmd(
                     "cat /proc/meminfo | grep MemAvailable | awk '{print $2}'"));
@@ -147,7 +160,7 @@ public class DeviceStatusUtil {
     }
 
     public static int getTotalMemory() {
-        int ret = 0;
+        int ret = Constants.INVALID_VALUE;
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromCmd(
                     "cat /proc/meminfo | grep MemTotal | awk '{print $2}'"));

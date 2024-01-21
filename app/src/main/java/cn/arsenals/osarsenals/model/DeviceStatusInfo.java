@@ -14,7 +14,7 @@ public class DeviceStatusInfo {
     public int gpuBusy = 0;
     public double cpuUtilization = 0.0;
     public int batteryCapacity = 0;
-    public int batteryTemp = 0;
+    public double batteryTemp = 0.0;
     public double fps = 0.0;
     public int totalRam = 0;
     public int availableRam = 0;

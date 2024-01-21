@@ -2,6 +2,7 @@
 // Created by e4256 on 2023/3/1.
 //
 #include <jni.h>
+#include "dirent.h"
 #include <string>
 #include <android/log.h>
 
@@ -25,7 +26,7 @@ std::string Jstring2String(JNIEnv *env, jstring str) {
     return result;
 }
 
-void ReadStringFromFile(const char* path, char* out) {
+void ReadStringFromFile(const char *path, char *out) {
     FILE *file = fopen(path, "r");
     if (file == nullptr) {
         return;
@@ -34,7 +35,7 @@ void ReadStringFromFile(const char* path, char* out) {
     fclose(file);
 }
 
-void ReadStringFromCmd(const char* cmd, char* out) {
+void ReadStringFromCmd(const char *cmd, char *out) {
     FILE *file = popen(cmd, "r");
     if (file == nullptr) {
         return;
@@ -44,7 +45,7 @@ void ReadStringFromCmd(const char* cmd, char* out) {
 }
 
 std::string GetCpuUtilizationStr() {
-    std::string ret = "";
+    std::string ret;
     const int idleTimeIndex = 4 - 1;
     char value[255];
     bool isFirstValue = true;
@@ -89,37 +90,83 @@ std::string GetCpuUtilizationStr() {
 }
 
 extern "C" JNIEXPORT jstring JNICALL Java_cn_arsenals_osarsenals_jni_ArsenalsJni_stringFromJNI(
-        JNIEnv* env,
-        jobject /* this */,
+        JNIEnv *env,
+        jclass clazz,
         jstring input) {
     std::string inStr = Jstring2String(env, input);
     std::string hello = inStr + "|Hello from C++";
     return env->NewStringUTF(hello.c_str());
 }
 
-extern "C" JNIEXPORT jstring JNICALL Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getStringValFromFile(
-    JNIEnv *env, jobject, jstring path) {
+extern "C" JNIEXPORT jstring JNICALL
+Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getStringValFromFile(
+        JNIEnv *env, jclass clazz, jstring path) {
     std::string pathStr = Jstring2String(env, path);
     char ret[255] = {0};
     ReadStringFromFile(pathStr.c_str(), ret);
     return env->NewStringUTF(ret);
 }
 
-extern "C" JNIEXPORT jstring JNICALL Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getStringValFromCmd(
-    JNIEnv *env, jobject, jstring cmd) {
+extern "C" JNIEXPORT jstring JNICALL
+Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getStringValFromCmd(
+        JNIEnv *env, jclass clazz, jstring cmd) {
     std::string cmdStr = Jstring2String(env, cmd);
     char ret[255] = {0};
     ReadStringFromCmd(cmdStr.c_str(), ret);
     return env->NewStringUTF(ret);
 }
 
-extern "C" JNIEXPORT jstring JNICALL Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getCpuUtilizationStr(
-    JNIEnv *env, jobject) {
+extern "C" JNIEXPORT jstring JNICALL
+Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getCpuUtilizationStr(
+        JNIEnv *env, jclass clazz) {
     return env->NewStringUTF(GetCpuUtilizationStr().c_str());
 }
 
 extern "C" JNIEXPORT jstring JNICALL Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getAioStatus(
-    JNIEnv *env, jobject) {
-    std::string ret = "";
+        JNIEnv *env, jclass clazz) {
+    std::string ret;
     return env->NewStringUTF(ret.c_str());
+}
+
+//extern "C"
+//JNIEXPORT jstring JNICALL
+//Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getHighestTemperature(JNIEnv *env, jclass clazz) {
+//    int tmpHighestTemp = -273000;
+//    std::string pathStr = "/sys/class/thermal/thermal_zone34/temp";
+//    char ret[255] = {0};
+//    ReadStringFromFile(pathStr.c_str(), ret);
+//    int valueInt = strtol(ret, nullptr, 10 /* decimal */);
+//    if (valueInt > tmpHighestTemp) {
+//        tmpHighestTemp = valueInt;
+//    }
+//    return env->NewStringUTF(std::to_string(tmpHighestTemp).c_str());
+//}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getHighestTemperature(JNIEnv *env, jclass clazz) {
+    int tmpHighestTemp = -273000;
+    std::string folderPathStr = "/sys/class/thermal/";
+    DIR *dir = opendir(folderPathStr.c_str());
+    if (dir == nullptr) {
+        return env->NewStringUTF("");
+    }
+    dirent *entry;
+    while ((entry = readdir(dir)) != nullptr) {
+        if (!(entry->d_type & DT_DIR || entry->d_type & DT_LNK)) {
+            continue;
+        }
+        const char *fileName = entry->d_name;
+        if (std::string(fileName).find("thermal_zone") == std::string::npos) {
+            continue;
+        }
+        std::string filePathStr = folderPathStr + fileName + "/temp";
+        char ret[255] = {0};
+        ReadStringFromFile(filePathStr.c_str(), ret);
+        int valueInt = strtol(ret, nullptr, 10 /* decimal */);
+        if (valueInt > tmpHighestTemp) {
+            tmpHighestTemp = valueInt;
+        }
+    }
+    closedir(dir);
+    return env->NewStringUTF(std::to_string(tmpHighestTemp).c_str());
 }
