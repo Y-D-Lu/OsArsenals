@@ -3,5 +3,9 @@
     <string name="overview">Overview</string>
     <string name="functions">Functions</string>
     <string name="settings">Settings</string>
-    <string name="on_hook">ON HOOK</string>
+    <string name="on_hook">On Hook</string>
+    <string name="performance_test">Performance Test</string>
+    <string name="perf_escape">Stop Test</string>
+    <string name="perf_single_core">Single Core Performance Test</string>
+    <string name="perf_multi_core">Multi Core Performance Test</string>
 </resources>

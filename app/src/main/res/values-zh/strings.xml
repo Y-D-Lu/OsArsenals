@@ -5,4 +5,8 @@
     <string name="functions">功能</string>
     <string name="settings">设置</string>
     <string name="on_hook">挂机</string>
+    <string name="performance_test">性能测试</string>
+    <string name="perf_escape">停止测试</string>
+    <string name="perf_single_core">单核性能测试</string>
+    <string name="perf_multi_core">多核性能测试</string>
 </resources>

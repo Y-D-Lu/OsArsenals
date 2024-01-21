@@ -26,8 +26,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp" />
             <Button
-                android:visibility="invisible"
+                android:id="@+id/func_performance_test_btn"
                 android:layout_weight="1"
+                android:text="@string/performance_test"
                 android:layout_width="match_parent"
                 android:layout_height="120dp" />
         </LinearLayout>

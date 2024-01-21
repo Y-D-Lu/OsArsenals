@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import cn.arsenals.osarsenals.R;
 import cn.arsenals.osarsenals.ui.OnHookActivity;
+import cn.arsenals.osarsenals.ui.PerformanceTestActivity;
 import cn.arsenals.osarsenals.utils.Alog;
 
 public class FunctionView extends RelativeLayout {
@@ -17,6 +18,7 @@ public class FunctionView extends RelativeLayout {
 
     private View view;
     private Button onHookBtn;
+    private Button performanceTestBtn;
 
     public FunctionView(Context context) {
         super(context);
@@ -49,6 +51,16 @@ public class FunctionView extends RelativeLayout {
             public void onClick(View v) {
                 Alog.info(TAG, "onHookBtn onClick");
                 Intent intent = new Intent(getContext(), OnHookActivity.class);
+                getContext().startActivity(intent);
+            }
+        });
+
+        performanceTestBtn = findViewById(R.id.func_performance_test_btn);
+        performanceTestBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Alog.info(TAG, "performanceTestBtn onClick");
+                Intent intent = new Intent(getContext(), PerformanceTestActivity.class);
                 getContext().startActivity(intent);
             }
         });
