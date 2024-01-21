@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">OsArsenals</string>
+    <string name="overview">Overview</string>
+    <string name="functions">Functions</string>
+    <string name="settings">Settings</string>
+    <string name="on_hook">ON HOOK</string>
 </resources>
