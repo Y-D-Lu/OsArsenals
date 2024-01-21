@@ -65,6 +65,8 @@ public class PerformanceTestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Alog.info(TAG, "escapeBtn onClick");
                 isProcessingTest = false;
+                singleCoreBtn.setEnabled(true);
+                multiCoreBtn.setEnabled(true);
             }
         });
 
@@ -73,6 +75,8 @@ public class PerformanceTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Alog.info(TAG, "singleCoreBtn onClick");
+                singleCoreBtn.setEnabled(false);
+                multiCoreBtn.setEnabled(false);
                 mPerformanceTestThreadPoolExecutor.submit(new Runnable() {
                     @Override
                     public void run() {
@@ -87,6 +91,8 @@ public class PerformanceTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Alog.info(TAG, "multiCoreBtn onClick");
+                singleCoreBtn.setEnabled(false);
+                multiCoreBtn.setEnabled(false);
                 for (int i = 0; i < CORE_POOL_SIZE; i++) {
                     mPerformanceTestThreadPoolExecutor.submit(new Runnable() {
                         @Override
@@ -97,6 +103,13 @@ public class PerformanceTestActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        singleCoreBtn.setEnabled(true);
+        multiCoreBtn.setEnabled(true);
     }
 
     @Override
