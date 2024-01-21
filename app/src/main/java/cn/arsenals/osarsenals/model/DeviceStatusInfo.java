@@ -26,13 +26,24 @@ public class DeviceStatusInfo {
     @NonNull
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("DeviceStatusInfo {").append("mTotalCpuCount $totalCpuCount\n" +
-                " mCpuFreqList ${cpuFreqList} mCpuOnlineList $cpuOnlineList\n mCpuUtilizationList $cpuUtilizationList" +
-                " mGpuFreq $gpuFreq mGpuBusy $gpuBusy mFps $fps" +
-                " mBatteryCapacity $batteryCapacity mBatteryCurrent $batteryCurrent" +
-                " mBatteryVoltage $batteryVoltage mBatteryPower $batteryPower mBatteryTemp $batteryTemp\n" +
-                " mAvailableRam $availableRam mTotalRam $totalRam mRamUtilization $ramUtilization").append(
-                "}");
+        sb.append("DeviceStatusInfo {")
+                .append("mTotalCpuCount ").append(totalCpuCount).append(System.lineSeparator())
+                .append("mCpuFreqList ").append(cpuFreqList).append(System.lineSeparator())
+                .append("mCpuOnlineList ").append(cpuOnlineList).append(System.lineSeparator())
+                .append("mCpuUtilizationList ").append(cpuUtilizationList).append(System.lineSeparator())
+                .append("mGpuFreq ").append(gpuFreq).append(System.lineSeparator())
+                .append("mGpuBusy ").append(gpuBusy).append(System.lineSeparator())
+                .append("mFps ").append(fps).append(System.lineSeparator())
+                .append("mBatteryCapacity ").append(batteryCapacity).append(System.lineSeparator())
+                .append("mBatteryCurrent ").append(batteryCurrent).append(System.lineSeparator())
+                .append("mBatteryVoltage ").append(batteryVoltage).append(System.lineSeparator())
+                .append("mTotalCpuCount ").append(totalCpuCount).append(System.lineSeparator())
+                .append("mBatteryPower ").append(batteryPower).append(System.lineSeparator())
+                .append("mBatteryTemp ").append(batteryTemp).append(System.lineSeparator())
+                .append("mAvailableRam ").append(availableRam).append(System.lineSeparator())
+                .append("mTotalRam ").append(totalRam).append(System.lineSeparator())
+                .append("mRamUtilization ").append(ramUtilization).append(System.lineSeparator())
+                .append("mTotalCpuCount ").append(totalCpuCount).append(System.lineSeparator());
         return sb.toString();
     }
 }

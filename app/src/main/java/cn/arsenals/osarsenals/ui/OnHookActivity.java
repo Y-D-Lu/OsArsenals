@@ -42,7 +42,7 @@ public class OnHookActivity extends AppCompatActivity {
         try {
             screenBrightness = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
             screenBrightnessMode = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE);
-            Alog.info(TAG, "onResume save screenBrightness $screenBrightness screenBrightnessMode $screenBrightnessMode");
+            Alog.info(TAG, "onResume save screenBrightness " + screenBrightness + "screenBrightnessMode " + screenBrightnessMode);
 
             Settings.System.putInt(
                     getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
@@ -58,7 +58,7 @@ public class OnHookActivity extends AppCompatActivity {
 
         Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, screenBrightness);
         Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, screenBrightnessMode);
-        Alog.info(TAG, "onPause restore screenBrightness $screenBrightness screenBrightnessMode $screenBrightnessMode");
+        Alog.info(TAG, "onResume restore screenBrightness " + screenBrightness + "screenBrightnessMode " + screenBrightnessMode);
     }
 
     private void setFullScreenStatus() {

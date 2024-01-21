@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import java.util.Arrays;
+
 import cn.arsenals.osarsenals.R;
 import cn.arsenals.osarsenals.jni.ArsenalsJni;
 import cn.arsenals.osarsenals.manager.OverviewViewManager;
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (view == functionBtn) {
-            Alog.info(TAG, "onClick on functionBtn currentView $currentView");
+            Alog.info(TAG, "onClick on functionBtn currentView " + currentView);
             if (currentView != functionView) {
                 mainRelativelayout.removeView(currentView);
                 mainRelativelayout.addView(functionView);
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             return;
         } else if (view == overviewBtn) {
-            Alog.info(TAG, "onClick on overviewBtn currentView $currentView");
+            Alog.info(TAG, "onClick on overviewBtn currentView " + currentView);
             if (currentView != overviewView) {
                 mainRelativelayout.removeView(currentView);
                 mainRelativelayout.addView(overviewView);
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             return;
         } else if (view == settingsBtn) {
-            Alog.info(TAG, "onClick on settingsBtn currentView $currentView");
+            Alog.info(TAG, "onClick on settingsBtn currentView " + currentView);
             if (currentView != settingsView) {
                 mainRelativelayout.removeView(currentView);
                 mainRelativelayout.addView(settingsView);
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             return;
         }
-        Alog.warn(TAG, "onClick on unknown view $view");
+        Alog.warn(TAG, "onClick on unknown view " + view);
     }
 
     @Override
@@ -160,17 +162,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         for (String permission : requestPermissionsList) {
             if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
-                Alog.info(TAG, "checkPermissionForOsArsenals $permission granted");
+                Alog.info(TAG, "checkPermissionForOsArsenals " + permission + " granted");
             } else {
-                Alog.info(TAG, "checkPermissionForOsArsenals $permission not granted");
+                Alog.info(TAG, "checkPermissionForOsArsenals " + permission + " not granted");
                 if (shouldShowRequestPermissionRationale(permission)) {
-                    Alog.warn(TAG, "checkPermissionForOsArsenals $permission denied!");
+                    Alog.warn(TAG, "checkPermissionForOsArsenals " + permission + " denied!");
                     Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                     Uri uri = Uri.fromParts("package", getPackageName(), null);
                     intent.setData(uri);
                     startActivity(intent);
                 } else {
-                    Alog.info(TAG, "checkPermissionForOsArsenals request $permission");
+                    Alog.info(TAG, "checkPermissionForOsArsenals request " + permission);
                     requestPermissions(requestPermissionsList, 0x1);
                 }
             }
@@ -182,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                            String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 0x1) {
-            Alog.info(TAG, "onRequestPermissionsResult 0x1 permissions ${Arrays.toString(permissions)} grantResults ${Arrays.toString(grantResults)}");
+            Alog.info(TAG, "onRequestPermissionsResult 0x1 permissions " + Arrays.toString(permissions) + " grantResults " + Arrays.toString(grantResults));
             // If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0) {
                 for (int result : grantResults) {

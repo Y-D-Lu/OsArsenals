@@ -26,7 +26,7 @@ public class DeviceStatusUtil {
         double ret = 0.0;
         try {
             ret = Double.parseDouble(ArsenalsJni.getStringValFromFile(
-                    "/sys/devices/system/cpu/cpu$cpuId/cpufreq/scaling_cur_freq"))
+                    "/sys/devices/system/cpu/cpu" + cpuId + "/cpufreq/scaling_cur_freq"))
                     / 1000.0;
         } catch (NumberFormatException ex) {
             Alog.warn(TAG, "getCurrentCpuFreq NumberFormatException");
@@ -73,7 +73,7 @@ public class DeviceStatusUtil {
         boolean ret = true;
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromFile(
-                    "/sys/devices/system/cpu/cpu$cpuId/online")) != 0;
+                    "/sys/devices/system/cpu/cpu" + cpuId + "/online")) != 0;
         } catch (NumberFormatException ex) {
             Alog.warn(TAG, "isCpuOnline NumberFormatException");
         }
@@ -128,7 +128,7 @@ public class DeviceStatusUtil {
         double ret = 0.0;
         try {
             ret = Double.parseDouble(ArsenalsJni.getStringValFromCmd(
-                    "cat /sys/class/drm/sde-crtc-0/measured_fps | awk '{print \\$2}'"));
+                    "cat /sys/class/drm/sde-crtc-0/measured_fps | awk '{print $2}'"));
         } catch (NumberFormatException ex) {
             Alog.warn(TAG, "getCurrentFps NumberFormatException");
         }
@@ -139,7 +139,7 @@ public class DeviceStatusUtil {
         int ret = 0;
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromCmd(
-                    "cat /proc/meminfo | grep MemAvailable | awk '{print \\$2}'"));
+                    "cat /proc/meminfo | grep MemAvailable | awk '{print $2}'"));
         } catch (NumberFormatException ex) {
             Alog.warn(TAG, "getCurrentFps NumberFormatException");
         }
@@ -150,7 +150,7 @@ public class DeviceStatusUtil {
         int ret = 0;
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromCmd(
-                    "cat /proc/meminfo | grep MemTotal | awk '{print \\$2}'"));
+                    "cat /proc/meminfo | grep MemTotal | awk '{print $2}'"));
         } catch (NumberFormatException ex) {
             Alog.warn(TAG, "getCurrentFps NumberFormatException");
         }
@@ -168,13 +168,13 @@ public class DeviceStatusUtil {
 
     public static boolean setThermalEnableStatus(Boolean isEnable) {
         String str = isEnable ? "enabled" : "disabled";
-        boolean isSucc1 = ArsenalsRoot.getInstance().execAsRoot("echo $str > /sys/class/thermal/thermal_zone0/mode\n");
-        boolean isSucc2 = ArsenalsRoot.getInstance().execAsRoot("echo $str > /sys/class/thermal/thermal_zone1/mode\n");
+        boolean isSucc1 = ArsenalsRoot.getInstance().execAsRoot("echo " + str + " > /sys/class/thermal/thermal_zone0/mode\n");
+        boolean isSucc2 = ArsenalsRoot.getInstance().execAsRoot("echo " + str + " > /sys/class/thermal/thermal_zone1/mode\n");
         if (isSucc1 && isSucc2) {
-            Alog.verbose(TAG, "setThermalEnableStatus $isEnable exec succeed");
+            Alog.verbose(TAG, "setThermalEnableStatus " + isEnable + " exec succeed");
             return true;
         }
-        Alog.warn(TAG, "setThermalEnableStatus $isEnable exec failed!");
+        Alog.warn(TAG, "setThermalEnableStatus " + isEnable + " exec failed!");
         return false;
     }
 }

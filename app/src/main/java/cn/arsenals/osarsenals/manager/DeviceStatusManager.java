@@ -59,7 +59,7 @@ public class DeviceStatusManager {
         Alog.info(TAG, "DeviceStatusManager uninit");
     }
 
-    private void startTimer() {
+    public void startTimer() {
         ref++;
         if (timer == null) {
             timer = new Timer();
@@ -74,9 +74,9 @@ public class DeviceStatusManager {
         }
     }
 
-    private void stopTimer() {
+    public void stopTimer() {
         ref--;
-        if (ref <= 0) {
+        if (ref <= 0 && timer != null) {
             timer.cancel();
             timer = null;
         }
@@ -84,7 +84,7 @@ public class DeviceStatusManager {
 
     public void registerDeviceInfoCb(IDeviceInfoCb cb) {
         if (deviceInfoCbList.contains(cb)) {
-            Alog.warn(TAG, "registerDeviceInfoCb mDeviceInfoCbList contains $cb, return!");
+            Alog.warn(TAG, "registerDeviceInfoCb mDeviceInfoCbList contains " + cb + ", return!");
             return;
         }
         deviceInfoCbList.add(cb);
@@ -92,7 +92,7 @@ public class DeviceStatusManager {
 
     public void unregisterDeviceInfoCb(IDeviceInfoCb cb) {
         if (!deviceInfoCbList.contains(cb)) {
-            Alog.warn(TAG, "unregisterDeviceInfoCb mDeviceInfoCbList !contains $cb, return!");
+            Alog.warn(TAG, "unregisterDeviceInfoCb mDeviceInfoCbList !contains \" + cb + \", return!");
             return;
         }
         deviceInfoCbList.remove(cb);
@@ -163,8 +163,8 @@ public class DeviceStatusManager {
             }
         } else {
             Alog.warn(TAG,
-                    "cpuUtilizationStrList ${cpuUtilizationStrList}" +
-                            " size ${cpuUtilizationStrList.size} not equals availableCpuCount $availableCpuCount");
+                    "cpuUtilizationStrList " + cpuUtilizationStrList +
+                            " size " + cpuUtilizationStrList.length + "not equals availableCpuCount " + availableCpuCount);
         }
 
         cpuTemp = DeviceStatusUtil.getCpuTemperature();
@@ -187,12 +187,13 @@ public class DeviceStatusManager {
             ramUtilization = 0;
         }
 
-//        Alog.verbose(TAG, "onTimerScheduled mTotalCpuCount $mTotalCpuCount\n" +
-//            " mCpuFreqList ${mCpuFreqList} mCpuOnlineList $mCpuOnlineList\n" +
-//            " mGpuFreq $mGpuFreq mGpuBusy $mGpuBusy mFps $mFps" +
-//            " mBatteryCapacity $mBatteryCapacity mBatteryCurrent $mBatteryCurrent" +
-//            " mBatteryVoltage $mBatteryVoltage mBatteryPower $mBatteryPower mBatteryTemp $mBatteryTemp\n" +
-//            " mAvailableRam $mAvailableRam mTotalRam $mTotalRam mRamUtilization $mRamUtilization")
+        Alog.verbose(TAG, "onTimerScheduled mTotalCpuCount " + totalCpuCount + "\n" +
+                " mCpuFreqList " + cpuFreqList + " mCpuOnlineList " + cpuOnlineList + "\n" +
+                " mGpuFreq " + gpuFreq + " mGpuBusy " + gpuBusy + " mFps " + fps +
+                " mBatteryCapacity " + batteryCapacity + " mBatteryCurrent " + batteryCurrent +
+                " mBatteryVoltage " + batteryVoltage + " mBatteryPower " + batteryPower +
+                " mBatteryTemp " + batteryTemp + "\n" + " mAvailableRam " + availableRam +
+                " mTotalRam " + totalRam + " mRamUtilization " + ramUtilization);
 
         deviceStatusInfo.cpuFreqList = cpuFreqList;
         deviceStatusInfo.cpuOnlineList = cpuOnlineList;

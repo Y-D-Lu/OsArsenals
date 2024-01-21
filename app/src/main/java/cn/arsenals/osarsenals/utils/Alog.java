@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class Alog {
     private static String convertToAlogTag(String tag) {
-        return "ARSENALS_$tag";
+        return "ARSENALS_" + tag;
     }
 
     public static void verbose(String tag, String msg) {

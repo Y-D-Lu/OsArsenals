@@ -6,6 +6,8 @@ import android.graphics.Point;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 
 import cn.arsenals.osarsenals.OsApplication;
@@ -24,7 +26,7 @@ public class OverviewViewManager {
     }
 
     private HandlerThread handlerThread = new HandlerThread("OverviewViewManagerHandlerThread");
-    private Handler handler = null;
+    private Handler handler;
 
     private WindowManager windowManager = (WindowManager) OsApplication.application.getSystemService(Context.WINDOW_SERVICE);
     private WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
@@ -34,7 +36,30 @@ public class OverviewViewManager {
     public void init() {
         Alog.info(TAG, "OverviewViewManager init");
 
-        layoutParams.type = 2018;
+        handlerThread.start();
+        handler = new Handler(handlerThread.getLooper());
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
+                        touchStartPoint.x = (int) event.getX();
+                        touchStartPoint.y = (int) event.getY();
+                    }
+                    case MotionEvent.ACTION_MOVE: {
+                        layoutParams.x = (int) (event.getRawX() - touchStartPoint.x);
+                        layoutParams.y = (int) (event.getRawY() - touchStartPoint.y);
+                        windowManager.updateViewLayout(view, layoutParams);
+                    }
+                    default: {
+                        break;
+                    }
+                }
+                return true;
+            }
+        });
+
+        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         layoutParams.x = 0;
         layoutParams.y = 0;
         layoutParams.flags = layoutParams.flags | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
@@ -56,6 +81,7 @@ public class OverviewViewManager {
         handler.post(new Runnable() {
             @Override
             public void run() {
+                DeviceStatusManager.getInstance().startTimer();
                 layoutParams.x = 0;
                 layoutParams.y = 0;
                 windowManager.addView(view, layoutParams);
@@ -67,7 +93,10 @@ public class OverviewViewManager {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                windowManager.removeView(view);
+                DeviceStatusManager.getInstance().stopTimer();
+                if (view.isAttachedToWindow()) {
+                    windowManager.removeView(view);
+                }
             }
         });
     }

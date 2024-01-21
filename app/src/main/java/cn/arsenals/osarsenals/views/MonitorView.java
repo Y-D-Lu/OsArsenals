@@ -22,15 +22,15 @@ public class MonitorView extends RelativeLayout {
     private DeviceStatusManager.IDeviceInfoCb deviceInfoCb = new DeviceStatusManager.IDeviceInfoCb() {
         @Override
         public void onDeviceInfoRefresh(DeviceStatusInfo info) {
-            Alog.verbose(TAG, "onDeviceInfoRefresh info $info");
+            Alog.verbose(TAG, "onDeviceInfoRefresh info " + info);
 
             if (eachCpuUtilizationList.size() != info.cpuUtilizationList.size() - 1) {
                 eachCpuUtilizationList.clear();
-                for (int i = 1; i < info.cpuUtilizationList.size(); i++){
+                for (int i = 1; i < info.cpuUtilizationList.size(); i++) {
                     eachCpuUtilizationList.add(info.cpuUtilizationList.get(i));
                 }
             } else {
-                for (int i = 0; i < eachCpuUtilizationList.size(); i++){
+                for (int i = 0; i < eachCpuUtilizationList.size(); i++) {
                     eachCpuUtilizationList.set(i, info.cpuUtilizationList.get(i + 1));
                 }
             }
@@ -43,29 +43,37 @@ public class MonitorView extends RelativeLayout {
             if (batteryInfoCircleView.updatePercentage(info.batteryCapacity)) {
                 batteryInfoCircleView.invalidate();
             }
-            cpuInfoTextView.setText("${info.cpuTemp}℃");
-            gpuInfoInnerTextView.setText("${info.gpuBusy}%");
-            gpuInfoTextView.setText("${info.gpuFreq}MHz");
-            batteryInfoInnerTextView.setText("${info.batteryCapacity}%");
-            batteryInfoTextView.setText("${info.batteryTemp}℃");
 
-            String cpuDetailText = "";
+            StringBuilder cpuDetailText = new StringBuilder();
             for (int i = 0; i < info.totalCpuCount; i++) {
-                cpuDetailText += "#$i ";
+                cpuDetailText.append("#").append(i).append(" ");
                 if (!info.cpuOnlineList.get(i)) {
-                    cpuDetailText += "OFFLINE";
+                    cpuDetailText.append("OFFLINE");
+                } else if (info.cpuUtilizationList.size() == 0) {
+                    cpuDetailText.append(Math.round(info.cpuFreqList.get(i))).append("MHz");
                 } else {
-                    cpuDetailText += "${info.cpuFreqList[i].roundToInt()}MHz ${info.cpuUtilizationList[i + 1]}%";
+                    cpuDetailText.append(Math.round(info.cpuFreqList.get(i))).append("MHz").append(info.cpuUtilizationList.get(i + 1)).append("%");
                 }
                 if (i != info.totalCpuCount - 1) {
-                    cpuDetailText += "\n";
+                    cpuDetailText.append("\n");
                 }
             }
-            cpuDetailTextView.setText(cpuDetailText);
-            fpsTextView.setText("FPS\n${info.fps}");
-            ramTextView.setText("RAM\n${info.ramUtilization}%");
-            currentTextView.setText("CUR\n${info.batteryCurrent}mA");
-            powerTextView.setText("PWR\n" + String.format(" % .2f " + ", info.batteryPower)}W"));
+            final String finalCpuDetailText = cpuDetailText.toString();
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    cpuInfoTextView.setText(info.cpuTemp + "℃");
+                    gpuInfoInnerTextView.setText(info.gpuBusy + "%");
+                    gpuInfoTextView.setText(info.gpuFreq + "MHz");
+                    batteryInfoInnerTextView.setText(info.batteryCapacity + "%");
+                    batteryInfoTextView.setText(info.batteryTemp + "℃");
+                    cpuDetailTextView.setText(finalCpuDetailText);
+                    fpsTextView.setText("FPS\n" + info.fps);
+                    ramTextView.setText("RAM\n" + info.ramUtilization + "%");
+                    currentTextView.setText("CUR\n" + info.batteryCurrent + "mA");
+                    powerTextView.setText("PWR\n" + String.format(" % .2f ", info.batteryPower) + "W");
+                }
+            });
         }
     };
 
