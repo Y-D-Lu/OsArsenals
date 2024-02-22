@@ -164,6 +164,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
                 Alog.info(TAG, "checkPermissionForOsArsenals " + permission + " granted");
             } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                    && Environment.isExternalStorageManager()) {
+                    Alog.warn(TAG,
+                        "ExternalStorageManager SDK >= 13 " + permission);
+                    if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permission)
+                        || Manifest.permission.READ_EXTERNAL_STORAGE.equals(permission)) {
+                        Alog.warn(TAG,
+                            "ExternalStorageManager SDK >= 13 , ignore EXTERNAL_STORAGE permission!");
+                        continue;
+                    }
+                }
                 Alog.info(TAG, "checkPermissionForOsArsenals " + permission + " not granted");
                 if (shouldShowRequestPermissionRationale(permission)) {
                     Alog.warn(TAG, "checkPermissionForOsArsenals " + permission + " denied!");
