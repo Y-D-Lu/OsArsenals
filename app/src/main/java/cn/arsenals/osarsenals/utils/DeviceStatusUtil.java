@@ -55,7 +55,7 @@ public class DeviceStatusUtil {
     public static double getHighestTemperature() {
         double ret = 0.0;
         try {
-            ret = Double.parseDouble(ArsenalsJni.getHighestTemperature()) / 1000.0;
+            ret = ArsenalsJni.getHighestTemperature() / 1000.0;
         } catch (NumberFormatException ex) {
             Alog.warn(TAG, "getBatteryCapacity NumberFormatException");
         }
@@ -77,7 +77,14 @@ public class DeviceStatusUtil {
         try {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromFile("/sys/class/kgsl/kgsl-3d0/gpu_busy_percentage"));
         } catch (NumberFormatException ex) {
-            Alog.warn(TAG, "getGpuBusy NumberFormatException");
+            Alog.warn(TAG, "getGpuBusyPercentage NumberFormatException");
+        }
+        if (ret == Constants.INVALID_VALUE) {
+            try {
+                ret = ArsenalsJni.getGpuBusy();
+            } catch (NumberFormatException ex) {
+                Alog.warn(TAG, "getGpuBusy NumberFormatException");
+            }
         }
         return ret;
     }

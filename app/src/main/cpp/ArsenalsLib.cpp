@@ -142,13 +142,13 @@ extern "C" JNIEXPORT jstring JNICALL Java_cn_arsenals_osarsenals_jni_ArsenalsJni
 //    return env->NewStringUTF(std::to_string(tmpHighestTemp).c_str());
 //}
 extern "C"
-JNIEXPORT jstring JNICALL
+JNIEXPORT jint JNICALL
 Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getHighestTemperature(JNIEnv *env, jclass clazz) {
     int tmpHighestTemp = -273000;
     std::string folderPathStr = "/sys/class/thermal/";
     DIR *dir = opendir(folderPathStr.c_str());
     if (dir == nullptr) {
-        return env->NewStringUTF("");
+        return reinterpret_cast<jint>(0);
     }
     dirent *entry;
     while ((entry = readdir(dir)) != nullptr) {
@@ -168,5 +168,32 @@ Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getHighestTemperature(JNIEnv *env, j
         }
     }
     closedir(dir);
-    return env->NewStringUTF(std::to_string(tmpHighestTemp).c_str());
+    return reinterpret_cast<jint>(tmpHighestTemp);
+}
+extern "C"
+JNIEXPORT jint JNICALL
+Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getGpuBusy(JNIEnv *env, jclass clazz) {
+    int ret = -1;
+    char value[255];
+    FILE *file = fopen("/sys/class/kgsl/kgsl-3d0/gpubusy", "r");
+    if (file == nullptr) {
+        return ret;
+    }
+
+    int used = 0;
+    int total = 0;
+    if (fscanf(file, "%s", value) == EOF) {
+        fclose(file);
+        return ret;
+    }
+    used = strtol(value, nullptr, 10 /* decimal */);
+    if (fscanf(file, "%s", value) == EOF) {
+        fclose(file);
+        return ret;
+    }
+    total = strtol(value, nullptr, 10 /* decimal */);
+    ret = round(used * 100.0 / total);
+
+    fclose(file);
+    return ret;
 }
