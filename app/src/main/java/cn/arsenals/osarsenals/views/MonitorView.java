@@ -64,7 +64,11 @@ public class MonitorView extends RelativeLayout {
                 public void run() {
                     cpuInfoTextView.setText(info.cpuTemp + "℃");
                     gpuInfoInnerTextView.setText(info.gpuBusy + "%");
-                    gpuInfoTextView.setText(info.gpuFreq + "MHz");
+                    if (info.gpuFreq < 0) {
+                        gpuInfoTextView.setText("GPU");
+                    } else {
+                        gpuInfoTextView.setText(info.gpuFreq + "MHz");
+                    }
                     batteryInfoInnerTextView.setText(info.batteryCapacity + "%");
                     batteryInfoTextView.setText(info.batteryTemp + "℃");
                     cpuDetailTextView.setText(finalCpuDetailText);
