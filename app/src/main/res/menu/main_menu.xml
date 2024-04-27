@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/main_menu_pin"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/main_menu_pin"
         android:title="PIN"
         app:showAsAction="ifRoom" />
-    <item android:id="@+id/main_menu_record"
+    <item
+        android:id="@+id/main_menu_record"
         android:title="REC"
-        app:showAsAction="ifRoom"/>
-    <item android:id="@+id/main_menu_about"
-        android:title="ABOUT" >
-    </item>
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/main_menu_about"
+        android:title="ABOUT"></item>
 </menu>

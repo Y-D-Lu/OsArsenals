@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.OnHookActivity"
-    android:background="@color/black">
+    android:background="@color/black"
+    tools:context=".ui.OnHookActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

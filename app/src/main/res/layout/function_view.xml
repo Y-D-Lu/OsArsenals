@@ -3,34 +3,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFDFDFDF"
-    android:orientation="vertical"
-    android:baselineAligned="false">
+    android:baselineAligned="false"
+    android:orientation="vertical">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/functions"/>
+        android:text="@string/functions" />
+
     <LinearLayout
         android:id="@+id/function_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/func_on_hook_btn"
-                android:layout_weight="1"
-                android:text="@string/on_hook"
                 android:layout_width="match_parent"
-                android:layout_height="120dp" />
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:text="@string/on_hook" />
+
             <Button
                 android:id="@+id/func_performance_test_btn"
-                android:layout_weight="1"
-                android:text="@string/performance_test"
                 android:layout_width="match_parent"
-                android:layout_height="120dp" />
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:text="@string/performance_test" />
         </LinearLayout>
     </LinearLayout>
 

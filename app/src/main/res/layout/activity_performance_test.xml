@@ -4,28 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.PerformanceTestActivity"
+    android:baselineAligned="false"
     android:orientation="vertical"
-    android:baselineAligned="false">
+    tools:context=".ui.PerformanceTestActivity">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/functions"/>
+        android:text="@string/functions" />
+
     <Button
         android:id="@+id/perf_escape_btn"
-        android:text="@string/perf_escape"
         android:layout_width="match_parent"
-        android:layout_height="120dp" />
+        android:layout_height="120dp"
+        android:text="@string/perf_escape" />
+
     <Button
         android:id="@+id/perf_single_core_btn"
-        android:text="@string/perf_single_core"
         android:layout_width="match_parent"
-        android:layout_height="120dp" />
+        android:layout_height="120dp"
+        android:text="@string/perf_single_core" />
+
     <Button
         android:id="@+id/perf_multi_core_btn"
-        android:text="@string/perf_multi_core"
         android:layout_width="match_parent"
-        android:layout_height="120dp" />
+        android:layout_height="120dp"
+        android:text="@string/perf_multi_core" />
 
 </LinearLayout>

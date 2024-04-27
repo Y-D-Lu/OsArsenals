@@ -10,39 +10,38 @@
         android:id="@+id/mainRelativelayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/mainLinerlayout">
-    </RelativeLayout>
+        android:layout_above="@+id/mainLinerlayout"></RelativeLayout>
 
     <LinearLayout
         android:id="@+id/mainLinerlayout"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/mainFunctionBtn"
-            android:background="@color/white"
-            android:text="@string/functions"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </Button>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:text="@string/functions"></Button>
+
         <Button
             android:id="@+id/mainOverviewBtn"
-            android:background="@color/white"
-            android:text="@string/overview"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </Button>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:text="@string/overview"></Button>
+
         <Button
             android:id="@+id/mainSettingsBtn"
-            android:background="@color/white"
-            android:text="@string/settings"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </Button>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:text="@string/settings"></Button>
     </LinearLayout>
 
 </RelativeLayout>
