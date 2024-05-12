@@ -45,14 +45,16 @@ public class MonitorView extends RelativeLayout {
             }
 
             StringBuilder cpuDetailText = new StringBuilder();
+            int offlineCount = 0;
             for (int i = 0; i < info.totalCpuCount; i++) {
                 cpuDetailText.append("#").append(i).append(" ");
                 if (!info.cpuOnlineList.get(i)) {
                     cpuDetailText.append("OFFLINE");
+                    offlineCount++;
                 } else if (info.cpuUtilizationList.size() == 0) {
                     cpuDetailText.append(Math.round(info.cpuFreqList.get(i))).append("MHz");
                 } else {
-                    cpuDetailText.append(Math.round(info.cpuFreqList.get(i))).append("MHz").append(info.cpuUtilizationList.get(i + 1)).append("%");
+                    cpuDetailText.append(Math.round(info.cpuFreqList.get(i))).append("MHz").append(info.cpuUtilizationList.get(i + 1 - offlineCount)).append("%");
                 }
                 if (i != info.totalCpuCount - 1) {
                     cpuDetailText.append("\n");
@@ -64,6 +66,15 @@ public class MonitorView extends RelativeLayout {
                 public void run() {
                     cpuInfoTextView.setText(info.cpuTemp + "℃");
                     gpuInfoInnerTextView.setText(info.gpuBusy + "%");
+                    if (info.gpuBusy < 0) {
+                        if (gpuInfoLayout.getVisibility() == View.VISIBLE) {
+                            gpuInfoLayout.setVisibility(View.GONE);
+                        }
+                    } else {
+                        if (gpuInfoLayout.getVisibility() != View.VISIBLE) {
+                            gpuInfoLayout.setVisibility(View.VISIBLE);
+                        }
+                    }
                     if (info.gpuFreq < 0) {
                         gpuInfoTextView.setText("GPU");
                     } else {
@@ -72,6 +83,15 @@ public class MonitorView extends RelativeLayout {
                     batteryInfoInnerTextView.setText(info.batteryCapacity + "%");
                     batteryInfoTextView.setText(info.batteryTemp + "℃");
                     cpuDetailTextView.setText(finalCpuDetailText);
+                    if (info.fps < 0) {
+                         if (fpsTextView.getVisibility() == View.VISIBLE) {
+                             fpsTextView.setVisibility(View.GONE);
+                         }
+                    } else {
+                        if (fpsTextView.getVisibility() != View.VISIBLE) {
+                            fpsTextView.setVisibility(View.VISIBLE);
+                        }
+                    }
                     fpsTextView.setText("FPS\n" + info.fps);
                     ramTextView.setText("RAM\n" + info.ramUtilization + "%");
                     currentTextView.setText("CUR\n" + info.batteryCurrent + "mA");
@@ -88,6 +108,7 @@ public class MonitorView extends RelativeLayout {
     private View view;
     private PercentageRectView cpuInfoRectView;
     private TextView cpuInfoTextView;
+    private RelativeLayout gpuInfoLayout;
     private PercentageCircleView gpuInfoCircleView;
     private TextView gpuInfoInnerTextView;
     private TextView gpuInfoTextView;
@@ -127,6 +148,7 @@ public class MonitorView extends RelativeLayout {
 
         cpuInfoRectView = findViewById(R.id.monitor_cpu_info_rect);
         cpuInfoTextView = findViewById(R.id.monitor_cpu_info_text);
+        gpuInfoLayout = findViewById(R.id.monitor_gpu_info_layout);
         gpuInfoCircleView = findViewById(R.id.monitor_gpu_info_circle);
         gpuInfoInnerTextView = findViewById(R.id.monitor_gpu_info_inner_text);
         gpuInfoTextView = findViewById(R.id.monitor_gpu_info_text);

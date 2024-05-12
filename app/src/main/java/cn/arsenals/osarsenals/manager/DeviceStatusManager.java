@@ -175,6 +175,20 @@ public class DeviceStatusManager {
             Alog.warn(TAG,
                     "cpuUtilizationStrList " + Arrays.toString(cpuUtilizationStrList) +
                             " size " + cpuUtilizationStrList.length + " not equals availableCpuCount " + availableCpuCount);
+            cpuUtilizationList.clear();
+            cpuUtilizationList.add(0);
+            double total = 0;
+            for (int i = 0; i < totalCpuCount; i++) {
+                if (cpuOnlineList.get(i)) {
+                    double maxFreq = DeviceStatusUtil.getMaxCpuFreq(i);
+                    double curFreq = cpuFreqList.get(i);
+                    double utilization = 100 * curFreq / maxFreq;
+                    total += utilization;
+                    cpuUtilizationList.add((int) utilization);
+                }
+            }
+            double average = total / (listSize - 1);
+            cpuUtilizationList.set(0, (int) average);
         }
 
         cpuTemp = DeviceStatusUtil.getCpuTemperature();

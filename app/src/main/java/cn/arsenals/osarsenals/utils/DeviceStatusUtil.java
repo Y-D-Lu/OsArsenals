@@ -34,6 +34,30 @@ public class DeviceStatusUtil {
         return ret;
     }
 
+    public static double getMaxCpuFreq(int cpuId) {
+        double ret = 0.0;
+        try {
+            ret = Double.parseDouble(ArsenalsJni.getStringValFromFile(
+                "/sys/devices/system/cpu/cpu" + cpuId + "/cpufreq/scaling_max_freq"))
+                / 1000.0;
+        } catch (NumberFormatException ex) {
+            Alog.warn(TAG, "getCurrentCpuFreq NumberFormatException");
+        }
+        return ret;
+    }
+
+    public static double getMinCpuFreq(int cpuId) {
+        double ret = 0.0;
+        try {
+            ret = Double.parseDouble(ArsenalsJni.getStringValFromFile(
+                "/sys/devices/system/cpu/cpu" + cpuId + "/cpufreq/scaling_min_freq"))
+                / 1000.0;
+        } catch (NumberFormatException ex) {
+            Alog.warn(TAG, "getCurrentCpuFreq NumberFormatException");
+        }
+        return ret;
+    }
+
     public static String getCpuUtilizationStr() {
         return ArsenalsJni.getCpuUtilizationStr();
     }
@@ -41,8 +65,13 @@ public class DeviceStatusUtil {
     public static double getCpuTemperature() {
         double ret = 0.0;
         try {
-            ret = Double.parseDouble(ArsenalsJni.getStringValFromFile(
-                    "/sys/class/thermal/thermal_zone20/temp")) / 1000.0;
+            double raw = Double.parseDouble(ArsenalsJni.getStringValFromFile(
+                "/sys/class/thermal/thermal_zone20/temp"));
+            if (raw > 1000.0) {
+                ret = raw / 1000.0;
+            } else {
+                ret = raw;
+            }
         } catch (NumberFormatException ex) {
             Alog.warn(TAG, "getBatteryCapacity NumberFormatException");
         }
@@ -55,7 +84,12 @@ public class DeviceStatusUtil {
     public static double getHighestTemperature() {
         double ret = 0.0;
         try {
-            ret = ArsenalsJni.getHighestTemperature() / 1000.0;
+            double raw = ArsenalsJni.getHighestTemperature();
+            if (raw > 1000.0) {
+                ret = raw / 1000.0;
+            } else {
+                ret = raw;
+            }
         } catch (NumberFormatException ex) {
             Alog.warn(TAG, "getBatteryCapacity NumberFormatException");
         }
@@ -145,7 +179,7 @@ public class DeviceStatusUtil {
     }
 
     public static double getCurrentFps() {
-        double ret = 0.0;
+        double ret = -1.0;
         try {
             ret = Double.parseDouble(ArsenalsJni.getStringValFromCmd(
                     "cat /sys/class/drm/sde-crtc-0/measured_fps | awk '{print $2}'"));
@@ -161,7 +195,19 @@ public class DeviceStatusUtil {
             ret = Integer.parseInt(ArsenalsJni.getStringValFromCmd(
                     "cat /proc/meminfo | grep MemAvailable | awk '{print $2}'"));
         } catch (NumberFormatException ex) {
-            Alog.warn(TAG, "getCurrentFps NumberFormatException");
+            Alog.warn(TAG, "getAvailableMemory NumberFormatException");
+        }
+        if (ret == Constants.INVALID_VALUE) {
+            try {
+                ret = Integer.parseInt(ArsenalsJni.getStringValFromCmd(
+                    "cat /proc/meminfo | grep MemFree | awk '{print $2}'"));
+                ret += Integer.parseInt(ArsenalsJni.getStringValFromCmd(
+                    "cat /proc/meminfo | grep Buffers | awk '{print $2}'"));
+                ret += Integer.parseInt(ArsenalsJni.getStringValFromCmd(
+                    "cat /proc/meminfo | grep Cached | awk '{print $2}'"));
+            } catch (NumberFormatException ex) {
+                Alog.warn(TAG, "getAvailableMemory NumberFormatException");
+            }
         }
         return ret;
     }
