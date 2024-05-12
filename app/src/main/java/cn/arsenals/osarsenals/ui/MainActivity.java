@@ -175,6 +175,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         continue;
                     }
                 }
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    if (Manifest.permission.READ_MEDIA_IMAGES.equals(permission)||
+                        Manifest.permission.READ_MEDIA_AUDIO.equals(permission) ||
+                        Manifest.permission.READ_MEDIA_VIDEO.equals(permission)) {
+                        Alog.warn(TAG,
+                            "SDK < 13 , ignore READ_MEDIA_IMAGES READ_MEDIA_AUDIO READ_MEDIA_VIDEO permission!");
+                        continue;
+                    }
+                }
                 Alog.info(TAG, "checkPermissionForOsArsenals " + permission + " not granted");
                 if (shouldShowRequestPermissionRationale(permission)) {
                     Alog.warn(TAG, "checkPermissionForOsArsenals " + permission + " denied!");
