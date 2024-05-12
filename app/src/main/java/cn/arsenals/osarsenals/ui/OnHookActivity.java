@@ -1,6 +1,7 @@
 package cn.arsenals.osarsenals.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.MotionEvent;
 import android.view.View;
@@ -50,6 +51,14 @@ public class OnHookActivity extends AppCompatActivity {
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }
+
+        new Handler(getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setFullScreen();
+                isFullScreen = true;
+            }
+        }, 10000);
     }
 
     @Override
@@ -67,12 +76,23 @@ public class OnHookActivity extends AppCompatActivity {
             if (getSupportActionBar() != null) {
                 getSupportActionBar().show();
             }
+            new Handler(getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setFullScreen();
+                    isFullScreen = true;
+                }
+            }, 10000);
         } else {
-            getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_FULLSCREEN);
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().hide();
-            }
+            setFullScreen();
         }
         isFullScreen = !isFullScreen;
+    }
+
+    private void setFullScreen() {
+        getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
     }
 }
