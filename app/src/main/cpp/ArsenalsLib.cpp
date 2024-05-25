@@ -5,6 +5,9 @@
 #include "dirent.h"
 #include <string>
 #include <android/log.h>
+#include <fcntl.h>
+#include <linux/input.h>
+#include <unistd.h>
 
 #define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE,"ARSENALS_JNI",__VA_ARGS__)
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,"ARSENALS_JNI", __VA_ARGS__)
@@ -33,6 +36,20 @@ void ReadStringFromFile(const char *path, char *out) {
     }
     fscanf(file, "%s", out);
     fclose(file);
+}
+
+bool writeEvent(int fd, int type, int code, int value) {
+    struct input_event ev;
+    memset(&ev, 0, sizeof(ev));
+    ev.type = type;
+    ev.code = code;
+    ev.value = value;
+    ssize_t bytes = write(fd, &ev, sizeof(struct input_event));
+    if (bytes < 0) {
+        LOGE("writeEvent fd %d type %d code %d value %d failed!", fd, type, code, value);
+        return false;
+    }
+    return true;
 }
 
 void ReadStringFromCmd(const char *cmd, char *out) {
@@ -196,4 +213,20 @@ Java_cn_arsenals_osarsenals_jni_ArsenalsJni_getGpuBusy(JNIEnv *env, jclass clazz
 
     fclose(file);
     return ret;
+}
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_cn_arsenals_osarsenals_jni_ArsenalsJni_writeInputEvent(
+        JNIEnv *env, jclass clazz, jstring path, jint type, jint code, jint value) {
+    std::string pathStr = Jstring2String(env, path);
+    int fd = open(pathStr.c_str(), O_RDWR | O_NONBLOCK);
+    if (fd < 0) {
+        LOGE("writeInputEvent pathStr %s open failed!", pathStr.c_str());
+        return false;
+    }
+    if (!writeEvent(fd,type,code,value)) {
+        LOGE("writeInputEvent fd %d type %d code %d value %d failed!", fd, type, code, value);
+        return false;
+    }
+    return true;
 }

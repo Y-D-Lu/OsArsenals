@@ -18,4 +18,6 @@ public class ArsenalsJni {
     public static native int getHighestTemperature();
 
     public static native int getGpuBusy();
+
+    public static native boolean writeInputEvent(String path, int type, int code, int value);
 }
