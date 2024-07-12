@@ -21,6 +21,7 @@ import java.util.Arrays;
 import cn.arsenals.osarsenals.R;
 import cn.arsenals.osarsenals.jni.ArsenalsJni;
 import cn.arsenals.osarsenals.manager.OverviewViewManager;
+import cn.arsenals.osarsenals.service.OsArsenalsService;
 import cn.arsenals.osarsenals.utils.Alog;
 import cn.arsenals.osarsenals.views.FunctionView;
 import cn.arsenals.osarsenals.views.OverviewView;
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         settingsView = new SettingsView(this);
         mainRelativelayout.addView(overviewView);
         currentView = overviewView;
+
+        startForegroundService(new Intent(this, OsArsenalsService.class));
 
         Alog.verbose(TAG, "onCreate : " + ArsenalsJni.stringFromJNI("Hello world"));
     }
