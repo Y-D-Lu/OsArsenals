@@ -156,6 +156,18 @@ public class OsArsenalsService extends Service {
                 break;
             }
             case "key": {
+                if (inputs.length < 2 || inputs.length > 3) {
+                    return;
+                }
+                try {
+                    int duration = 0;
+                    if (inputs.length == 3) {
+                        duration = Integer.parseInt(inputs[2]);
+                    }
+                    InputUtil.injectKey(Integer.parseInt(inputs[1]), duration);
+                } catch (NumberFormatException exception) {
+                    Alog.warn(TAG, "handleInjectInput NumberFormatException");
+                }
                 break;
             }
             default: {

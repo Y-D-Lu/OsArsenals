@@ -2,6 +2,8 @@ package cn.arsenals.osarsenals.utils;
 
 import android.os.SystemClock;
 import android.view.InputDevice;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import cn.arsenals.aos.input.AosInputUtil;
@@ -130,6 +132,16 @@ public class InputUtil {
         AosInputUtil.injectInputEvent(event, AosInputUtil.INJECT_INPUT_EVENT_MODE_ASYNC);
     }
 
+    public static void injectKeyEvent(int action, int keyCode) {
+        KeyEvent event = new KeyEvent(
+            /* downTime= */ 0, /* eventTime= */ 0,
+            /* action= */ action, /* code= */keyCode, /* repeat= */ 0,
+            /* metaState= */ 0, /* deviceId= */ KeyCharacterMap.VIRTUAL_KEYBOARD,
+            /* scancode= */ 0, /* flags= */ 0, /* source= */ 0);
+        Alog.debug(TAG, "injectKeyEvent " + event);
+        AosInputUtil.injectInputEvent(event, AosInputUtil.INJECT_INPUT_EVENT_MODE_ASYNC);
+    }
+
     public static void injectClick(float x, float y) {
         injectClick(x, y, 0);
     }
@@ -216,6 +228,27 @@ public class InputUtil {
                             new float[]{firstCurrentX, secondCurrentX}, new float[]{firstCurrentY, secondCurrentY});
                     }
                 }
+            }
+        }).start();
+    }
+
+    public static void injectKey(int keyCode, int duration) {
+        if (duration <= 0) {
+            injectKeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+            injectKeyEvent(KeyEvent.ACTION_UP, keyCode);
+            return;
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                injectKeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+                try {
+                    Thread.sleep(duration);
+                } catch (InterruptedException e) {
+                    Alog.warn(TAG, "injectKey sleep InterruptedException");
+                }
+                injectKeyEvent(KeyEvent.ACTION_UP, keyCode);
             }
         }).start();
     }
