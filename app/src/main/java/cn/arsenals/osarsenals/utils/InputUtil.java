@@ -1,12 +1,26 @@
 package cn.arsenals.osarsenals.utils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Rect;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.view.IWindowManager;
 import android.view.InputDevice;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
+
 import cn.arsenals.aos.input.AosInputUtil;
+import cn.arsenals.osarsenals.OsApplication;
 
 public class InputUtil {
     private static final String TAG = "InputUtil";
@@ -251,5 +265,164 @@ public class InputUtil {
                 injectKeyEvent(KeyEvent.ACTION_UP, keyCode);
             }
         }).start();
+    }
+
+    /**
+     * CALL IN MAIN THREAD
+     * captureDisplay
+     *
+     * @param left      capture rect left
+     * @param top       capture rect top
+     * @param right     capture rect right
+     * @param bottom    capture rect bottom
+     * @param displayId capture displayId
+     * @return bitmap as ARGB_8888
+     */
+    public static Bitmap captureDisplay(int left, int top, int right, int bottom, int displayId) {
+        Bitmap bitmap = null;
+        Rect sourceCrop = new Rect(left, top, right, bottom);
+        try {
+            IWindowManager windowManager = IWindowManager.Stub.asInterface(ServiceManager.getServiceOrThrow(Context.WINDOW_SERVICE));
+            Class<?> screenCaptureClass = Class.forName("android.window.ScreenCapture");
+            Class<?> captureArgsClass = Class.forName("android.window.ScreenCapture$CaptureArgs");
+            Class<?> captureArgsBuilderClass = Class.forName("android.window.ScreenCapture$CaptureArgs$Builder");
+            Class<?> screenCaptureListenerClass = Class.forName("android.window.ScreenCapture$ScreenCaptureListener");
+            Class<?> synchronousScreenCaptureListenerClass = Class.forName("android.window.ScreenCapture$SynchronousScreenCaptureListener");
+            Class<?> screenshotHardwareBufferClass = Class.forName("android.window.ScreenCapture$ScreenshotHardwareBuffer");
+            Method setSourceCropMethod = captureArgsBuilderClass.getDeclaredMethod("setSourceCrop", Rect.class);
+            Object captureArgsBuilder = captureArgsBuilderClass.newInstance();
+            setSourceCropMethod.invoke(captureArgsBuilder, sourceCrop);
+            Method buildMethod = captureArgsBuilderClass.getDeclaredMethod("build");
+            Object captureArgs = buildMethod.invoke(captureArgsBuilder);
+            Method createSyncCaptureListenerMethod = screenCaptureClass.getMethod("createSyncCaptureListener");
+            Object syncScreenCapture = createSyncCaptureListenerMethod.invoke(null);
+            Method captureDisplayMethod = windowManager.getClass().getMethod("captureDisplay", int.class, captureArgsClass, screenCaptureListenerClass);
+            captureDisplayMethod.invoke(windowManager, displayId, captureArgs, syncScreenCapture);
+            Method getBufferMethod = synchronousScreenCaptureListenerClass.getMethod("getBuffer");
+            Object buffer = getBufferMethod.invoke(syncScreenCapture);
+            if (buffer == null) {
+                Alog.warn(TAG, "captureDisplayAsync buffer is null!");
+                return bitmap;
+            }
+            Method asBitmapMethod = screenshotHardwareBufferClass.getMethod("asBitmap");
+            bitmap = (Bitmap) asBitmapMethod.invoke(buffer);
+            if (bitmap == null) {
+                Alog.warn(TAG, "captureDisplayAsync bitmap is null!");
+                return bitmap;
+            }
+            return bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        } catch (Exception e) {
+            Alog.warn(TAG, "captureDisplay Exception " + e);
+        }
+        return bitmap;
+    }
+
+    public interface ICaptureDisplayCb {
+        void onCaptureDisplay(Bitmap bitmap);
+    }
+
+    /**
+     * captureDisplayAsync
+     *
+     * @param left      capture rect left
+     * @param top       capture rect top
+     * @param right     capture rect right
+     * @param bottom    capture rect bottom
+     * @param displayId capture displayId
+     * @param callback capture callback
+     */
+    public static void captureDisplayAsync(int left, int top, int right, int bottom, int displayId, final ICaptureDisplayCb callback, Handler originalHandler) {
+        if (callback == null) {
+            Alog.warn(TAG, "captureDisplayAsync callBack is null!");
+            return;
+        }
+        new Handler(OsApplication.application.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap bitmap = null;
+                Rect sourceCrop = new Rect(left, top, right, bottom);
+                try {
+                    IWindowManager windowManager = IWindowManager.Stub.asInterface(ServiceManager.getServiceOrThrow(Context.WINDOW_SERVICE));
+                    Class<?> screenCaptureClass = Class.forName("android.window.ScreenCapture");
+                    Class<?> captureArgsClass = Class.forName("android.window.ScreenCapture$CaptureArgs");
+                    Class<?> captureArgsBuilderClass = Class.forName("android.window.ScreenCapture$CaptureArgs$Builder");
+                    Class<?> screenCaptureListenerClass = Class.forName("android.window.ScreenCapture$ScreenCaptureListener");
+                    Class<?> synchronousScreenCaptureListenerClass = Class.forName("android.window.ScreenCapture$SynchronousScreenCaptureListener");
+                    Class<?> screenshotHardwareBufferClass = Class.forName("android.window.ScreenCapture$ScreenshotHardwareBuffer");
+                    Method setSourceCropMethod = captureArgsBuilderClass.getDeclaredMethod("setSourceCrop", Rect.class);
+                    Object captureArgsBuilder = captureArgsBuilderClass.newInstance();
+                    setSourceCropMethod.invoke(captureArgsBuilder, sourceCrop);
+                    Method buildMethod = captureArgsBuilderClass.getDeclaredMethod("build");
+                    Object captureArgs = buildMethod.invoke(captureArgsBuilder);
+                    Method createSyncCaptureListenerMethod = screenCaptureClass.getMethod("createSyncCaptureListener");
+                    Object syncScreenCapture = createSyncCaptureListenerMethod.invoke(null);
+                    Method captureDisplayMethod = windowManager.getClass().getMethod("captureDisplay", int.class, captureArgsClass, screenCaptureListenerClass);
+                    captureDisplayMethod.invoke(windowManager, displayId, captureArgs, syncScreenCapture);
+                    Method getBufferMethod = synchronousScreenCaptureListenerClass.getMethod("getBuffer");
+                    Object buffer = getBufferMethod.invoke(syncScreenCapture);
+                    if (buffer == null) {
+                        Alog.warn(TAG, "captureDisplayAsync buffer is null!");
+                        originalHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onCaptureDisplay(null);
+                            }
+                        });
+                        return;
+                    }
+                    Method asBitmapMethod = screenshotHardwareBufferClass.getMethod("asBitmap");
+                    bitmap = (Bitmap) asBitmapMethod.invoke(buffer);
+                    if (bitmap == null) {
+                        Alog.warn(TAG, "captureDisplayAsync bitmap is null!");
+                        originalHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onCaptureDisplay(null);
+                            }
+                        });
+                        return;
+                    }
+                    final Bitmap finalBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                    originalHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onCaptureDisplay(finalBitmap);
+                        }
+                    });
+                    return;
+                } catch (Exception e) {
+                    Alog.warn(TAG, "captureDisplay Exception " + e);
+                }
+                originalHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onCaptureDisplay(null);
+                    }
+                });
+            }
+        });
+    }
+
+    public static void saveBitmap(Bitmap bitmap, String fileName) {
+        try {
+            File file = new File(Environment.getExternalStorageDirectory() + "/OsArsenals/" + fileName + ".jpg");
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.close();
+        } catch (IOException e) {
+            Alog.warn(TAG, "saveBitmap IOException");
+        }
+    }
+
+    public static void saveAsFile(String fileName, String content) {
+        try {
+            File file = new File(Environment.getExternalStorageDirectory() + "/OsArsenals/" + fileName + ".txt");
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(content.getBytes(StandardCharsets.UTF_8));
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            Alog.warn(TAG, "saveAsFile IOException");
+        }
     }
 }

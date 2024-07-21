@@ -2,8 +2,12 @@ package cn.arsenals.osarsenals;
 
 import android.app.Application;
 import android.content.res.Configuration;
+import android.os.Environment;
+
+import java.io.File;
 
 import cn.arsenals.osarsenals.manager.DeviceStatusManager;
+import cn.arsenals.osarsenals.manager.InputManager;
 import cn.arsenals.osarsenals.manager.OverviewViewManager;
 import cn.arsenals.osarsenals.utils.Alog;
 
@@ -23,8 +27,12 @@ public class OsApplication extends Application {
 
         application = this;
 
+        File file = new File(Environment.getExternalStorageDirectory() + "/OsArsenals");
+        file.mkdirs();
+
         Alog.info(TAG, "Application onCreate");
         OverviewViewManager.getInstance().init();
         DeviceStatusManager.getInstance().init();
+        InputManager.getInstance().init(application);
     }
 }

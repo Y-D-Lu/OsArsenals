@@ -13,11 +13,24 @@ import android.os.IBinder;
 
 import java.util.Arrays;
 
+import cn.arsenals.osarsenals.manager.InputManager;
 import cn.arsenals.osarsenals.utils.Alog;
+import cn.arsenals.osarsenals.utils.GenshinImpactUtil;
 import cn.arsenals.osarsenals.utils.InputUtil;
 
 public class OsArsenalsService extends Service {
     private static final String TAG = "OsArsenalsService";
+
+    private static final String ACTION_BROADCAST = "cn.arsenals.osarsenals.BROADCAST";
+
+    // adb shell am broadcast -a cn.arsenals.osarsenals.INJECT_INPUT --es "input" "tap,0,0"
+    private static final String ACTION_INJECT_INPUT = "cn.arsenals.osarsenals.INJECT_INPUT";
+
+    // adb shell am broadcast -a cn.arsenals.osarsenals.UPDATE_POINT_MAP --es "key" "GENSHIN_POINT_MAP" --es "value" "300,157"
+    private static final String ACTION_UPDATE_POINT_MAP = "cn.arsenals.osarsenals.UPDATE_POINT_MAP";
+
+    // adb shell am broadcast -a cn.arsenals.osarsenals.EXECUTE_COMMAND --es "type" "genshin" --es "command" "a\|sleep,1000\|z,1000"
+    private static final String ACTION_EXECUTE_COMMAND = "cn.arsenals.osarsenals.EXECUTE_COMMAND";
 
     private class ServiceBroadcastReceiver extends BroadcastReceiver {
 
@@ -27,13 +40,23 @@ public class OsArsenalsService extends Service {
                 return;
             }
             switch (intent.getAction()) {
-                case "cn.arsenals.osarsenals.BROADCAST": {
+                case ACTION_BROADCAST: {
                     Alog.info(TAG, "ServiceBroadcastReceiver BROADCAST");
                     break;
                 }
-                case "cn.arsenals.osarsenals.INJECT_INPUT": {
+                case ACTION_INJECT_INPUT: {
                     Alog.info(TAG, "ServiceBroadcastReceiver INJECT_INPUT");
                     handleInjectInput(intent);
+                    break;
+                }
+                case ACTION_UPDATE_POINT_MAP: {
+                    Alog.info(TAG, "ServiceBroadcastReceiver UPDATE_POINT_MAP");
+                    handleUpdatePointMap(intent);
+                    break;
+                }
+                case ACTION_EXECUTE_COMMAND: {
+                    Alog.info(TAG, "ServiceBroadcastReceiver ACTION_EXECUTE_COMMAND");
+                    handleExecuteCommand(intent);
                     break;
                 }
                 default: {
@@ -54,8 +77,10 @@ public class OsArsenalsService extends Service {
 
         ServiceBroadcastReceiver serviceBroadcastReceiver = new ServiceBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("cn.arsenals.osarsenals.BROADCAST");
-        intentFilter.addAction("cn.arsenals.osarsenals.INJECT_INPUT");
+        intentFilter.addAction(ACTION_BROADCAST);
+        intentFilter.addAction(ACTION_INJECT_INPUT);
+        intentFilter.addAction(ACTION_UPDATE_POINT_MAP);
+        intentFilter.addAction(ACTION_EXECUTE_COMMAND);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(serviceBroadcastReceiver, intentFilter, Context.RECEIVER_EXPORTED);
         } else {
@@ -172,6 +197,52 @@ public class OsArsenalsService extends Service {
             }
             default: {
                 Alog.warn(TAG, "handleInjectInput unknown " + inputs[0]);
+                break;
+            }
+        }
+    }
+
+    private void handleUpdatePointMap(Intent intent) {
+        if (intent == null) {
+            return;
+        }
+        String key = intent.getStringExtra("key");
+        String value = intent.getStringExtra("value");
+        if (key == null || value == null) {
+            return;
+        }
+        String[] point = value.split(",");
+        Alog.info(TAG, "handleUpdatePointMap " + key + " " + Arrays.toString(point));
+        if (point.length != 2) {
+            Alog.warn(TAG, "handleUpdatePointMap length not 2 " + point.length);
+            return;
+        }
+        try {
+            int posX = Integer.parseInt(point[0]);
+            int posY = Integer.parseInt(point[1]);
+            InputManager.getInstance().updatePointMap(key, posX, posY);
+        } catch (NumberFormatException e) {
+            Alog.warn(TAG, "handleUpdatePointMap NumberFormatException");
+        }
+    }
+
+    private void handleExecuteCommand(Intent intent) {
+        if (intent == null) {
+            return;
+        }
+        String type = intent.getStringExtra("type");
+        String command = intent.getStringExtra("command");
+        if (type == null || command == null) {
+            return;
+        }
+        Alog.info(TAG, "handleExecuteCommand " + type + " " + command);
+        switch (type) {
+            case "genshin": {
+                GenshinImpactUtil.handleGenshinCommand(command);
+                break;
+            }
+            default: {
+                Alog.warn(TAG, "handleExecuteCommand unknown " + type);
                 break;
             }
         }
