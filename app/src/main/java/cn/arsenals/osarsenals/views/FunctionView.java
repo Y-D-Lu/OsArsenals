@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import cn.arsenals.osarsenals.R;
+import cn.arsenals.osarsenals.ui.GenshinImpactArsenalsActivity;
 import cn.arsenals.osarsenals.ui.OnHookActivity;
 import cn.arsenals.osarsenals.ui.PerformanceTestActivity;
 import cn.arsenals.osarsenals.ui.StandbyActivity;
@@ -21,6 +22,7 @@ public class FunctionView extends RelativeLayout {
     private Button onHookBtn;
     private Button performanceTestBtn;
     private Button standbyBtn;
+    private Button genshinBtn;
 
     public FunctionView(Context context) {
         super(context);
@@ -73,6 +75,16 @@ public class FunctionView extends RelativeLayout {
             public void onClick(View v) {
                 Alog.info(TAG, "standbyBtn onClick");
                 Intent intent = new Intent(getContext(), StandbyActivity.class);
+                getContext().startActivity(intent);
+            }
+        });
+
+        genshinBtn = findViewById(R.id.func_genshin_btn);
+        genshinBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Alog.info(TAG, "genshinBtn onClick");
+                Intent intent = new Intent(getContext(), GenshinImpactArsenalsActivity.class);
                 getContext().startActivity(intent);
             }
         });

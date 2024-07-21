@@ -21,16 +21,16 @@ import cn.arsenals.osarsenals.utils.InputUtil;
 public class OsArsenalsService extends Service {
     private static final String TAG = "OsArsenalsService";
 
-    private static final String ACTION_BROADCAST = "cn.arsenals.osarsenals.BROADCAST";
+    public static final String ACTION_BROADCAST = "cn.arsenals.osarsenals.BROADCAST";
 
     // adb shell am broadcast -a cn.arsenals.osarsenals.INJECT_INPUT --es "input" "tap,0,0"
-    private static final String ACTION_INJECT_INPUT = "cn.arsenals.osarsenals.INJECT_INPUT";
+    public static final String ACTION_INJECT_INPUT = "cn.arsenals.osarsenals.INJECT_INPUT";
 
     // adb shell am broadcast -a cn.arsenals.osarsenals.UPDATE_POINT_MAP --es "key" "GENSHIN_POINT_MAP" --es "value" "300,157"
-    private static final String ACTION_UPDATE_POINT_MAP = "cn.arsenals.osarsenals.UPDATE_POINT_MAP";
+    public static final String ACTION_UPDATE_POINT_MAP = "cn.arsenals.osarsenals.UPDATE_POINT_MAP";
 
     // adb shell am broadcast -a cn.arsenals.osarsenals.EXECUTE_COMMAND --es "type" "genshin" --es "command" "a\|sleep,1000\|z,1000"
-    private static final String ACTION_EXECUTE_COMMAND = "cn.arsenals.osarsenals.EXECUTE_COMMAND";
+    public static final String ACTION_EXECUTE_COMMAND = "cn.arsenals.osarsenals.EXECUTE_COMMAND";
 
     private class ServiceBroadcastReceiver extends BroadcastReceiver {
 
