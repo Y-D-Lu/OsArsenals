@@ -44,14 +44,16 @@ public class GenshinImpactUtil {
     public static final String GENSHIN_POINT_DOMAIN_EXIT_CONFORM = "1450,810";
     public static final String GENSHIN_POINT_DOMAIN_EXIT_FINAL = "1200,975";
     public static final String GENSHIN_POINT_DOMAIN_GET_BONUS = "1451,537";
+    public static final String GENSHIN_POINT_DOMAIN_USE_CONDENSED_RESIN = "950,810";
     public static final String GENSHIN_POINT_DOMAIN_USE_ORIGINAL_RESIN = "1450,810";
     public static final String GENSHIN_POINT_DOMAIN_EXIT_AFTER_GET_BONUS = "950,980";
     public static final String GENSHIN_POINT_SWITCH_PLAYER_BACKGROUND1 = "2100,240";
     public static final String GENSHIN_POINT_SWITCH_PLAYER_BACKGROUND2 = "2100,360";
     public static final String GENSHIN_POINT_SWITCH_PLAYER_BACKGROUND3 = "2100,480";
     public static final String GENSHIN_POINT_PLAYER_WALK_AHEAD = "440,625";
-    public static final String GENSHIN_POINT_PLAYER_WALK_LEFT = "440,825";
-    public static final String GENSHIN_POINT_PLAYER_WALK_RIGHT = "441,825";
+    public static final String GENSHIN_POINT_PLAYER_WALK_BACK = "440,1025";
+    public static final String GENSHIN_POINT_PLAYER_WALK_LEFT = "240,825";
+    public static final String GENSHIN_POINT_PLAYER_WALK_RIGHT = "641,825";
     public static final String GENSHIN_POINT_PLAYER_JUMP = "2100,700";
     public static final String GENSHIN_POINT_PLAYER_SPRINT = "2100,930";
     public static final String GENSHIN_POINT_PLAYER_ATTACK = "1920,825";
@@ -62,6 +64,7 @@ public class GenshinImpactUtil {
     private static final HandlerThread handlerThread = new HandlerThread("GenshinImpactUtilHandlerThread");
     private static Handler handler;
     private static String fightLoopStr = "e,1000|sleep,600|switch,1|sleep,1000|nahida_e|sleep,600|switch,2|sleep,1000|e|sleep,1000|switch,3|sleep,1000|e|sleep,600|neuvillette_z|switch,1|sleep,600";
+    private static String fightLoopLiteStr = "e|sleep,500|switch,1|sleep,600|e|sleep,600|switch,2|sleep,500|e|sleep,600|a|sleep,1400|a|sleep,1400|z,1000|sleep,500|a|sleep,1200|a|sleep,1400|z,1000|sleep,200|switch,3|sleep,200|e|sleep,1000|switch,1|sleep,1000";
     private static boolean isDomainProcessing = false;
     private static void initHandler() {
         handlerThread.start();
@@ -206,6 +209,50 @@ public class GenshinImpactUtil {
                         Thread.sleep(duration);
                         break;
                     }
+                    case "see_left": {
+                        int distance = 100;
+                        int duration = 500;
+                        if (arr.length > 1) {
+                            try {
+                                distance = Integer.parseInt(arr[1]);
+                            } catch (NumberFormatException e) {
+                                Alog.warn(TAG, "handleGenshinCommand see_left NumberFormatException!");
+                            }
+                        }
+                        if (arr.length > 2) {
+                            try {
+                                duration = Integer.parseInt(arr[2]);
+                            } catch (NumberFormatException e) {
+                                Alog.warn(TAG, "handleGenshinCommand see_left NumberFormatException!");
+                            }
+                        }
+                        Point point = InputManager.getInstance().getPointFromMap("POINT_SCREEN_CENTER");
+                        InputUtil.injectSwipe(point.x, point.y, point.x - distance, point.y, duration, 50);
+                        Thread.sleep(duration);
+                        break;
+                    }
+                    case "see_right": {
+                        int distance = 100;
+                        int duration = 500;
+                        if (arr.length > 1) {
+                            try {
+                                distance = Integer.parseInt(arr[1]);
+                            } catch (NumberFormatException e) {
+                                Alog.warn(TAG, "handleGenshinCommand see_right NumberFormatException!");
+                            }
+                        }
+                        if (arr.length > 2) {
+                            try {
+                                duration = Integer.parseInt(arr[2]);
+                            } catch (NumberFormatException e) {
+                                Alog.warn(TAG, "handleGenshinCommand see_right NumberFormatException!");
+                            }
+                        }
+                        Point point = InputManager.getInstance().getPointFromMap("POINT_SCREEN_CENTER");
+                        InputUtil.injectSwipe(point.x, point.y, point.x + distance, point.y, duration, 50);
+                        Thread.sleep(duration);
+                        break;
+                    }
                     case "ahead": {
                         int duration = 500;
                         if (arr.length > 1) {
@@ -216,6 +263,20 @@ public class GenshinImpactUtil {
                             }
                         }
                         Point point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_PLAYER_WALK_AHEAD");
+                        InputUtil.injectClick(point.x, point.y, duration);
+                        Thread.sleep(duration);
+                        break;
+                    }
+                    case "back": {
+                        int duration = 500;
+                        if (arr.length > 1) {
+                            try {
+                                duration = Integer.parseInt(arr[1]);
+                            } catch (NumberFormatException e) {
+                                Alog.warn(TAG, "handleGenshinCommand ahead NumberFormatException!");
+                            }
+                        }
+                        Point point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_PLAYER_WALK_BACK");
                         InputUtil.injectClick(point.x, point.y, duration);
                         Thread.sleep(duration);
                         break;
@@ -324,6 +385,7 @@ public class GenshinImpactUtil {
                         InputUtil.injectClick(point.x, point.y, 0);
                         break;
                     }
+                    // adb shell am broadcast -a cn.arsenals.osarsenals.EXECUTE_COMMAND --es "type" "genshin" --es "command" "domain_finish"
                     case "domain_finish": {
                         rotateTowardsEast(new IRotateTowardsEastCb() {
                             @Override
@@ -400,6 +462,17 @@ public class GenshinImpactUtil {
                         // should return here to avoid command in fightLoopStr
                         return;
                     }
+                    // adb shell am broadcast -a cn.arsenals.osarsenals.EXECUTE_COMMAND --es "type" "genshin" --es "command" "fight_loop_lite,a\|sleep,1000\|a"
+                    case "fight_loop_lite": {
+                        if (arr.length < 2) {
+                            Alog.info(TAG, "handleGenshinCommand fight_loop_lite use profile");
+                            handleGenshinCommand(fightLoopLiteStr);
+                            return;
+                        }
+                        handleGenshinCommand(command.substring("fight_loop_lite,".length()));
+                        // should return here to avoid command in fightLoopLiteStr
+                        return;
+                    }
                     // adb shell am broadcast -a cn.arsenals.osarsenals.EXECUTE_COMMAND --es "type" "genshin" --es "command" "set_fight_loop,e,1000\|sleep,600\|switch,1\|sleep,1000\|nahida_e\|sleep,600\|switch,2\|sleep,1000\|e\|sleep,1000\|switch,3\|sleep,1000\|e\|sleep,600\|neuvillette_z\|switch,1\|sleep,600"
                     case "set_fight_loop": {
                         if (arr.length < 2) {
@@ -410,6 +483,16 @@ public class GenshinImpactUtil {
                         // should return here to avoid command in fightLoopStr
                         return;
                     }
+                    // adb shell am broadcast -a cn.arsenals.osarsenals.EXECUTE_COMMAND --es "type" "genshin" --es "command" "command" "e\|sleep,500\|switch,1\|sleep,500\|e\|sleep,600\|switch,2\|sleep,500\|e\|sleep,600\|a\|sleep,1400\|a\|sleep,1400\|z,1000\|sleep,500\|a\|sleep,1200\|a\|sleep,1400\|z,1000\|sleep,200\|switch,3\|sleep,200\|e\|sleep,1000\|switch,1\|sleep,600"
+                    case "set_fight_loop_lite": {
+                        if (arr.length < 2) {
+                            Alog.warn(TAG, "handleGenshinCommand set_fight_loop_lite lenth < 2 " + arr.length);
+                            return;
+                        }
+                        fightLoopLiteStr = command.substring("set_fight_loop_lite,".length());
+                        // should return here to avoid command in fightLoopLiteStr
+                        return;
+                    }
                     case "process_fight_domain": {
                         isDomainProcessing = true;
                         InputUtil.saveAsFile("isDomainProcessing", "isDomainProcessing");
@@ -417,6 +500,20 @@ public class GenshinImpactUtil {
                             @Override
                             public void onFinish(boolean isSucceed) {
                                 Alog.info(TAG, "handleGenshinCommand process_fight_domain onFinish " + isSucceed);
+                                isDomainProcessing = false;
+                                InputUtil.saveAsFile("isDomainProcessing", isSucceed ? "succeed" : "failed");
+                            }
+                        });
+                        break;
+                    }
+                    // only for Clear Pool and Mountain Cavern
+                    case "process_fight_domain_lite": {
+                        isDomainProcessing = true;
+                        InputUtil.saveAsFile("isDomainProcessing", "isDomainProcessing");
+                        processFightDomainLite(new IProcessFightDomainCb() {
+                            @Override
+                            public void onFinish(boolean isSucceed) {
+                                Alog.info(TAG, "handleGenshinCommand process_fight_domain_lite onFinish " + isSucceed);
                                 isDomainProcessing = false;
                                 InputUtil.saveAsFile("isDomainProcessing", isSucceed ? "succeed" : "failed");
                             }
@@ -588,10 +685,12 @@ public class GenshinImpactUtil {
         if (tryCount <= 0) {
             Alog.warn(TAG, "judgePositionAndAdjust tryCount <= 0, failed!");
             callback.onFinish(false);
+            return;
         }
         if (moveAheadCount <= 0) {
             Alog.warn(TAG, "judgePositionAndAdjust moveAheadCount <= 0, failed!");
             callback.onFinish(false);
+            return;
         }
         InputUtil.captureDisplayAsync(0, 0, 2400, 1080, 0, new InputUtil.ICaptureDisplayCb() {
             @Override
@@ -668,6 +767,96 @@ public class GenshinImpactUtil {
         }, handler);
     }
 
+    private static void judgePositionAndAdjustLite(IJudgePositionAndAdjustCb callback, int tryCount, int moveAheadCount) {
+        if (callback == null) {
+            Alog.warn(TAG, "judgePositionAndAdjustLite callBack is null!");
+            return;
+        }
+        if (tryCount <= 0) {
+            Alog.warn(TAG, "judgePositionAndAdjustLite tryCount <= 0, failed!");
+            callback.onFinish(false);
+            return;
+        }
+        if (moveAheadCount <= 0) {
+            Alog.warn(TAG, "judgePositionAndAdjustLite moveAheadCount <= 0, failed!");
+            callback.onFinish(false);
+            return;
+        }
+        InputUtil.captureDisplayAsync(0, 0, 2400, 1080, 0, new InputUtil.ICaptureDisplayCb() {
+            @Override
+            public void onCaptureDisplay(Bitmap bitmap) {
+                if (bitmap == null) {
+                    Alog.warn(TAG, "judgePositionAndAdjustLite bitmap is null!");
+                    return;
+                }
+                for (int x = 0; x < bitmap.getWidth(); x++) {
+                    for (int y = 0; y < bitmap.getHeight(); y++) {
+                        int color = bitmap.getPixel(x, y);
+                        int r = Color.red(color);
+                        int g = Color.green(color);
+                        int b = Color.blue(color);
+                        if (r > 127 && g > 90 && b > 77) {
+                            bitmap.setPixel(x, y, 0xFFFFFFFF);
+                        } else {
+                            bitmap.setPixel(x, y, 0xFF000000);
+                        }
+                    }
+                }
+
+                ArrayList<Integer> validCenterList = getValidCenterList(bitmap);
+                try {
+                    if (validCenterList.size() == 0) {
+                        Alog.warn(TAG, "judgePositionAndAdjustLite invalid valid_center_list! try move ahead!");
+                        Point point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_PLAYER_WALK_AHEAD");
+                        InputUtil.injectClick(point.x, point.y, 500);
+                        Thread.sleep(500);
+                        Thread.sleep(1000);
+                        judgePositionAndAdjustLite(callback, tryCount - 1, moveAheadCount - 1);
+                    } else if (validCenterList.size() == 1) {
+                        if (validCenterList.get(0) < 1200) {
+                            Alog.warn(TAG, "judgePositionAndAdjustLite stage is at left side? move to left");
+                            Point point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_PLAYER_WALK_LEFT");
+                            InputUtil.injectClick(point.x, point.y, 500);
+                            Thread.sleep(500);
+                            Thread.sleep(1000);
+                            judgePositionAndAdjustLite(callback, tryCount - 1, moveAheadCount);
+                        } else {
+                            Alog.warn(TAG, "judgePositionAndAdjustLite stage is at right side? move to right");
+                            Point point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_PLAYER_WALK_RIGHT");
+                            InputUtil.injectClick(point.x, point.y, 500);
+                            Thread.sleep(500);
+                            Thread.sleep(1000);
+                            judgePositionAndAdjustLite(callback, tryCount - 1, moveAheadCount);
+                        }
+                    } else {
+                        int left = validCenterList.get(0);
+                        int right = validCenterList.get(1);
+                        if (right < 1250) {
+                            Alog.info(TAG, "judgePositionAndAdjustLite stage is at left side, move to left");
+                            Point point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_PLAYER_WALK_LEFT");
+                            InputUtil.injectClick(point.x, point.y, 500);
+                            Thread.sleep(500);
+                            Thread.sleep(1000);
+                            judgePositionAndAdjustLite(callback, tryCount - 1, moveAheadCount);
+                        } else if (left > 1150) {
+                            Alog.info(TAG, "judgePositionAndAdjustLite stage is at right side, move to right");
+                            Point point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_PLAYER_WALK_RIGHT");
+                            InputUtil.injectClick(point.x, point.y, 500);
+                            Thread.sleep(500);
+                            Thread.sleep(1000);
+                            judgePositionAndAdjustLite(callback, tryCount - 1, moveAheadCount);
+                        } else {
+                            Alog.info(TAG, "judgePositionAndAdjustLite no need to move");
+                            callback.onFinish(true);
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    Alog.warn(TAG, "judgePositionAndAdjustLite InterruptedException");
+                }
+            }
+        }, handler);
+    }
+
     private static ArrayList<Integer> getValidCenterList(Bitmap bitmap) {
         ArrayList<Integer> centerPointList = new ArrayList<>();
         int length = 0;
@@ -720,6 +909,9 @@ public class GenshinImpactUtil {
             if (lengthTop > 10 && lengthTop < 50 && lengthBottom > 10 && lengthBottom < 50 && Math.abs(lengthTop - lengthBottom) < 5) {
                 for (int x = 0; x < 20; x++) {
                     for (int y = 0; y < 20; y++) {
+                        if (pt - 10 + x < 0 || pt - 10 + x > bitmap.getWidth() - 1) {
+                            continue;
+                        }
                         bitmap.setPixel(pt - 10 + x, 400 - y, 0xFFFF0000);
                     }
                 }
@@ -736,7 +928,7 @@ public class GenshinImpactUtil {
                 int whitePixelCount = 0;
                 for (int x = 0; x < 100; x++) {
                     for (int y = 0; y < 100; y++) {
-                        if (bitmap.getPixel(center - 50 + x, 200 + y) == 0xFFFFFFFF) {
+                        if (center - 50 + x > 0 && center - 50 + x < bitmap.getWidth() - 1 && bitmap.getPixel(center - 50 + x, 200 + y) == 0xFFFFFFFF) {
                             whitePixelCount++;
                         }
                     }
@@ -753,8 +945,10 @@ public class GenshinImpactUtil {
             resultList.add(currentMaxIndex + 1);
             for (int x = 0; x < 20; x++) {
                 for (int y = 0; y < 20; y++) {
-                    bitmap.setPixel(resultList.get(0) - 10 + x, 400 - y, 0xFFFFFFFF);
-                    bitmap.setPixel(resultList.get(1) - 10 + x, 400 - y, 0xFFFFFFFF);
+                    if (resultList.get(0) - 10 + x > 0 && resultList.get(0) - 10 + x < bitmap.getWidth() - 1) {
+                        bitmap.setPixel(resultList.get(0) - 10 + x, 400 - y, 0xFFFFFFFF);
+                        bitmap.setPixel(resultList.get(1) - 10 + x, 400 - y, 0xFFFFFFFF);
+                    }
                 }
             }
             return resultList;
@@ -785,10 +979,10 @@ public class GenshinImpactUtil {
                 int g = Color.green(color);
                 int b = Color.blue(color);
                 if (r > 240 && g > 177 && b < 15) {
-                    Alog.info(TAG, "isDomainSucceed true");
+                    Alog.info(TAG, "isDomainSucceed true " + Integer.toHexString(color));
                     callback.onCallback(true);
                 } else {
-                    Alog.debug(TAG, "isDomainSucceed false");
+                    Alog.debug(TAG, "isDomainSucceed false " + Integer.toHexString(color));
                     callback.onCallback(false);
                 }
             }
@@ -866,6 +1060,89 @@ public class GenshinImpactUtil {
         }, 10);
     }
 
+    private static void processFightDomainLite(IProcessFightDomainCb callback) {
+        if (callback == null) {
+            Alog.warn(TAG, "processFightDomainLite callBack is null!");
+            return;
+        }
+        Point point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_PLAYER_OPERATE");
+        InputUtil.injectClick(point.x, point.y, 0);
+        fightDomainLoopLite(new IFightDomainLoopCb() {
+            @Override
+            public void onFinish(boolean isSucceed) {
+                Alog.info(TAG, "processFightDomainLite onFinish isSucceed " + isSucceed);
+                if (isSucceed) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Alog.warn(TAG, "processFightDomainLite onFinish InterruptedException");
+                    }
+                    Point point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_SWITCH_PLAYER_BACKGROUND1");
+                    InputUtil.injectClick(point.x, point.y, 0);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Alog.warn(TAG, "processFightDomainLite onFinish InterruptedException");
+                    }
+
+                    point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_PLAYER_ATTACK");
+                    InputUtil.injectSwipe(point.x, point.y, point.x, point.y, 1000, 50);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Alog.warn(TAG, "processFightDomainLite onFinish InterruptedException");
+                    }
+
+                    rotateTowardsEast(new IRotateTowardsEastCb() {
+                        @Override
+                        public void onFinish() {
+                            Alog.info(TAG, "rotateTowardsEastLite onFinish");
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                Alog.warn(TAG, "processFightDomainLite onFinish InterruptedException");
+                            }
+                            Point point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_SWITCH_PLAYER_BACKGROUND1");
+                            InputUtil.injectClick(point.x, point.y, 0);
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                Alog.warn(TAG, "processFightDomainLite onFinish InterruptedException");
+                            }
+                            point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_PLAYER_WALK_AHEAD");
+                            InputUtil.injectClick(point.x, point.y, 8000);
+                            try {
+                                Thread.sleep(8000);
+                            } catch (InterruptedException e) {
+                                Alog.warn(TAG, "processFightDomainLite onFinish InterruptedException");
+                            }
+                            judgePositionAndAdjustLite(new IJudgePositionAndAdjustCb() {
+                                @Override
+                                public void onFinish(boolean isSucceed) {
+                                    Alog.info(TAG, "judgePositionAndAdjustLite onFinish isSucceed " + isSucceed);
+                                    if (isSucceed) {
+                                        Point point = InputManager.getInstance().getPointFromMap("GENSHIN_POINT_PLAYER_WALK_AHEAD");
+                                        InputUtil.injectClick(point.x, point.y, 10000);
+                                        try {
+                                            Thread.sleep(10000);
+                                        } catch (InterruptedException e) {
+                                            Alog.warn(TAG, "processFightDomainLite judgePositionAndAdjust onFinish InterruptedException");
+                                        }
+                                        callback.onFinish(true);
+                                    } else {
+                                        callback.onFinish(false);
+                                    }
+                                }
+                            }, 10, 5);
+                        }
+                    });
+                } else {
+                    callback.onFinish(false);
+                }
+            }
+        }, 10);
+    }
+
     public interface IFightDomainLoopCb {
         void onFinish(boolean isSucceed);
     }
@@ -889,6 +1166,29 @@ public class GenshinImpactUtil {
                 }
                 handleGenshinCommandInner(fightLoopStr);
                 fightDomainLoop(callback, tryCount - 1);
+            }
+        });
+    }
+
+    private static void fightDomainLoopLite(IFightDomainLoopCb callback, int tryCount) {
+        if (callback == null) {
+            Alog.warn(TAG, "fightDomainLoop callBack is null!");
+            return;
+        }
+        if (tryCount < 0) {
+            Alog.warn(TAG, "fightDomainLoop tryCount < 0, failed!");
+            callback.onFinish(false);
+        }
+        GenshinImpactUtil.isDomainSucceed(new GenshinImpactUtil.IDomainSucceedCb() {
+            @Override
+            public void onCallback(boolean isSucceed) {
+                Alog.info(TAG, "handleGenshinCommand is_domain_succeed " + isSucceed);
+                if (isSucceed) {
+                    callback.onFinish(true);
+                    return;
+                }
+                handleGenshinCommandInner(fightLoopLiteStr);
+                fightDomainLoopLite(callback, tryCount - 1);
             }
         });
     }

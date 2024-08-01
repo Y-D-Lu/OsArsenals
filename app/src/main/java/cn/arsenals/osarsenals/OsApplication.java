@@ -7,6 +7,7 @@ import android.os.Environment;
 import java.io.File;
 
 import cn.arsenals.osarsenals.manager.DeviceStatusManager;
+import cn.arsenals.osarsenals.manager.GenshinImpactArsenalsViewManager;
 import cn.arsenals.osarsenals.manager.InputManager;
 import cn.arsenals.osarsenals.manager.OverviewViewManager;
 import cn.arsenals.osarsenals.utils.Alog;
@@ -34,5 +35,6 @@ public class OsApplication extends Application {
         OverviewViewManager.getInstance().init();
         DeviceStatusManager.getInstance().init();
         InputManager.getInstance().init(application);
+        GenshinImpactArsenalsViewManager.getInstance().init();
     }
 }

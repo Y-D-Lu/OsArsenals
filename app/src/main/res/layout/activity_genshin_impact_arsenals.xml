@@ -10,10 +10,43 @@
 
     <EditText
         android:id="@+id/genshin_et"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_gravity="center" />
+    <ScrollView
+        android:id="@+id/genshin_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_lite_clear_pool_and_mountain_cavern"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:text="lite_clear_pool_and_mountain_cavern" />
+
+            <Button
+                android:id="@+id/btn_forsaken_rift"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:text="forsaken_rift" />
+
+            <Button
+                android:id="@+id/btn_pale_forgotten_glory"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:text="pale_forgotten_glory" />
+        </LinearLayout>
+    </ScrollView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,5 +65,11 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="1" />
+        <Button
+            android:id="@+id/genshin_presets_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="PRESETS" />
     </LinearLayout>
 </LinearLayout>
