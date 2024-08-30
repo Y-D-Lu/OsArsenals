@@ -73,7 +73,7 @@ public class GenshinImpactArsenalsViewManager {
         });
 
         layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-        layoutParams.x = 2240;
+        layoutParams.x = 0;
         layoutParams.y = 0;
         layoutParams.flags = layoutParams.flags | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
         layoutParams.flags = layoutParams.flags | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
@@ -94,7 +94,7 @@ public class GenshinImpactArsenalsViewManager {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                layoutParams.x = 0;
+                layoutParams.x = 2240;
                 layoutParams.y = 0;
                 windowManager.addView(view, layoutParams);
             }
