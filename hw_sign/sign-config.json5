@@ -1,0 +1,12 @@
+{
+  "keyAlias": "OpenHarmony Application Release",
+  "profileKeyAlias": "OpenHarmony Application Profile Release",
+  "signAlg": "SHA256withECDSA",
+  "keyPwd": "123456",
+  "keystorePwd": "123456",
+  "keystoreFile": "OpenHarmony.p12",
+  "appCertFile": "OpenHarmonyApplication.pem",
+  "profileCertFile": "OpenHarmonyProfileRelease.pem",
+  "profileTemplate": "UnsgnedReleasedProfileTemplate.json",
+  "hapSignToolJar": "hap-sign-tool.jar"
+}

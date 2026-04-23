@@ -1,0 +1,20 @@
+/node_modules
+/oh_modules
+/local.properties
+/.idea
+**/build
+/.hvigor
+.cxx
+/.clangd
+/.clang-format
+/.clang-tidy
+**/.test
+/.appanalyzer
+/.claude/settings.local.json
+/.claude/memory/
+/.claude/projects/
+/.claude/scheduled_tasks.json
+
+# 签名产物（动态生成）
+*.p7b
+hw_sign/openharmony_sx.p7b
