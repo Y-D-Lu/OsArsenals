@@ -1,0 +1,1 @@
+e,1000|sleep,600|z,1000|sleep,500|domain_exit
