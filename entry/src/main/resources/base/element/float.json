@@ -2,7 +2,31 @@
   "float": [
     {
       "name": "page_text_font_size",
-      "value": "50fp"
+      "value": "20vp"
+    },
+    {
+      "name": "card_corner_radius",
+      "value": "8vp"
+    },
+    {
+      "name": "card_padding",
+      "value": "16vp"
+    },
+    {
+      "name": "component_margin",
+      "value": "8vp"
+    },
+    {
+      "name": "tab_bar_height",
+      "value": "56vp"
+    },
+    {
+      "name": "progress_circle_size",
+      "value": "30vp"
+    },
+    {
+      "name": "progress_rect_height",
+      "value": "4vp"
     }
   ]
 }

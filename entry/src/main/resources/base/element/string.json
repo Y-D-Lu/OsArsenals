@@ -2,15 +2,223 @@
   "string": [
     {
       "name": "module_desc",
-      "value": "module description"
+      "value": "OsArsenals 设备性能监控与自动化辅助应用"
     },
     {
       "name": "EntryAbility_desc",
-      "value": "description"
+      "value": "OsArsenals 主入口"
     },
     {
       "name": "EntryAbility_label",
-      "value": "label"
+      "value": "OsArsenals"
+    },
+    {
+      "name": "overview",
+      "value": "概览"
+    },
+    {
+      "name": "function",
+      "value": "功能"
+    },
+    {
+      "name": "settings",
+      "value": "设置"
+    },
+    {
+      "name": "genshin_automation",
+      "value": "原神自动化"
+    },
+    {
+      "name": "hook_mode",
+      "value": "挂机模式"
+    },
+    {
+      "name": "standby_mode",
+      "value": "待机显示"
+    },
+    {
+      "name": "performance_test",
+      "value": "性能测试"
+    },
+    {
+      "name": "permission_float_window_reason",
+      "value": "需要悬浮窗权限以显示实时设备监控面板"
+    },
+    {
+      "name": "permission_inject_input_reason",
+      "value": "需要输入注入权限以实现自动化操作"
+    },
+    {
+      "name": "permission_running_info_reason",
+      "value": "需要获取运行信息权限以接收后台命令"
+    },
+    {
+      "name": "device_status_overview",
+      "value": "设备状态概览"
+    },
+    {
+      "name": "cpu_monitoring",
+      "value": "CPU监控"
+    },
+    {
+      "name": "gpu_monitoring",
+      "value": "GPU监控"
+    },
+    {
+      "name": "battery_monitoring",
+      "value": "电池监控"
+    },
+    {
+      "name": "memory_monitoring",
+      "value": "内存监控"
+    },
+    {
+      "name": "start_floating_window",
+      "value": "启动悬浮窗"
+    },
+    {
+      "name": "stop_floating_window",
+      "value": "关闭悬浮窗"
+    },
+    {
+      "name": "script_editor",
+      "value": "脚本编辑器"
+    },
+    {
+      "name": "preset_scripts",
+      "value": "预设脚本"
+    },
+    {
+      "name": "execute_script",
+      "value": "执行脚本"
+    },
+    {
+      "name": "stop_script",
+      "value": "停止执行"
+    },
+    {
+      "name": "cpu_temperature",
+      "value": "CPU温度"
+    },
+    {
+      "name": "fps",
+      "value": "帧率"
+    },
+    {
+      "name": "current",
+      "value": "电流"
+    },
+    {
+      "name": "power",
+      "value": "功率"
+    },
+    {
+      "name": "service_desc",
+      "value": "OsArsenals后台服务，接收和处理广播命令"
+    },
+    {
+      "name": "service_label",
+      "value": "OsArsenalsService"
+    },
+    {
+      "name": "moving_photo",
+      "value": "实况照片"
+    },
+    {
+      "name": "moving_photo_desc",
+      "value": "创建Apple风格实况照片"
+    },
+    {
+      "name": "static_image_optional",
+      "value": "静态图片（可选）"
+    },
+    {
+      "name": "dynamic_video_required",
+      "value": "动态视频（必选）"
+    },
+    {
+      "name": "select_image",
+      "value": "添加图片"
+    },
+    {
+      "name": "select_video",
+      "value": "添加视频"
+    },
+    {
+      "name": "generate_moving_photo",
+      "value": "生成实况照片"
+    },
+    {
+      "name": "extracting_first_frame",
+      "value": "正在提取视频首帧..."
+    },
+    {
+      "name": "generating_moving_photo",
+      "value": "正在生成实况照片..."
+    },
+    {
+      "name": "moving_photo_success",
+      "value": "实况照片生成成功！"
+    },
+    {
+      "name": "video_duration_warning",
+      "value": "视频时长超过3.9秒，建议选择较短的视频"
+    },
+    {
+      "name": "permission_read_media_reason",
+      "value": "需要读取媒体文件权限以选择图片和视频"
+    },
+    {
+      "name": "permission_write_media_reason",
+      "value": "需要写入媒体文件权限以保存实况照片"
+    },
+    {
+      "name": "watermark",
+      "value": "本机水印"
+    },
+    {
+      "name": "watermark_desc",
+      "value": "设置图片水印和设备EXIF信息"
+    },
+    {
+      "name": "view_watermark",
+      "value": "查看水印属性"
+    },
+    {
+      "name": "set_watermark",
+      "value": "设置水印属性"
+    },
+    {
+      "name": "select_single_image",
+      "value": "选择单张图片"
+    },
+    {
+      "name": "select_multiple_images",
+      "value": "选择多张图片（最多500张）"
+    },
+    {
+      "name": "watermark_type_info",
+      "value": "水印类型信息"
+    },
+    {
+      "name": "processing_images",
+      "value": "正在处理图片..."
+    },
+    {
+      "name": "watermark_query_success",
+      "value": "水印属性查询成功"
+    },
+    {
+      "name": "watermark_set_success",
+      "value": "水印设置成功！水印类型:BRAND_COMMON，EXIF:已修改"
+    },
+    {
+      "name": "metadata_edit",
+      "value": "元数据编辑"
+    },
+    {
+      "name": "aperture_batch",
+      "value": "批量光圈"
     }
   ]
 }

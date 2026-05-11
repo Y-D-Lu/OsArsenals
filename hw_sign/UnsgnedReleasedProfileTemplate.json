@@ -1,11 +1,11 @@
 {
-    "version-name": "2.0.0",
-    "version-code": 2,
+    "version-name": "1.0.0",
+    "version-code": 1000000,
     "app-distribution-type": "os_integration",
     "uuid": "5027b99e-5f9e-465d-9508-a9e0134ffe18",
     "validity": {
         "not-before": 1594865258,
-        "not-after": 1689473258
+        "not-after": 1953421258
     },
     "type": "release",
     "bundle-info": {
@@ -17,11 +17,24 @@
     },
     "acls": {
         "allowed-acls": [
-            ""
+            "ohos.permission.SYSTEM_FLOAT_WINDOW",
+            "ohos.permission.INJECT_INPUT_EVENT",
+            "ohos.permission.GET_RUNNING_INFO",
+            "ohos.permission.READ_IMAGEVIDEO",
+            "ohos.permission.WRITE_IMAGEVIDEO"
         ]
     },
     "permissions": {
-        "restricted-permissions": []
+        "restricted-permissions": [
+            "ohos.permission.SYSTEM_FLOAT_WINDOW",
+            "ohos.permission.INJECT_INPUT_EVENT",
+            "ohos.permission.GET_RUNNING_INFO",
+            "ohos.permission.READ_IMAGEVIDEO",
+            "ohos.permission.WRITE_IMAGEVIDEO"
+        ]
     },
-    "issuer": "pki_internal"
+    "issuer": "pki_internal",
+    "app-privilege-capabilities": [
+        "AllowAppUsePrivilegeExtension"
+    ]
 }

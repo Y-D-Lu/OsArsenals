@@ -1,5 +1,17 @@
 {
   "src": [
-    "pages/Index"
+    "pages/Index",
+    "pages/OverviewPage",
+    "pages/FunctionPage",
+    "pages/SettingsPage",
+    "pages/GenshinPage",
+    "pages/HookPage",
+    "pages/StandbyPage",
+    "pages/PerformanceTestPage",
+    "pages/MonitorPanel",
+    "pages/MovingPhotoPage",
+    "pages/WatermarkPage",
+    "pages/MetadataEditPage",
+    "pages/AperturePage"
   ]
 }

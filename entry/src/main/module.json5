@@ -44,6 +44,56 @@
             "resource": "$profile:backup_config"
           }
         ],
+      },
+      {
+        "name": "ServiceAbility",
+        "srcEntry": "./ets/abilities/ServiceAbility.ets",
+        "type": "service",
+        "description": "$string:service_desc",
+        "exported": true,
+        "label": "$string:service_label"
+      }
+    ],
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.SYSTEM_FLOAT_WINDOW",
+        "reason": "$string:permission_float_window_reason",
+        "usedScene": {
+          "abilities": ["EntryAbility"],
+          "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.INJECT_INPUT_EVENT",
+        "reason": "$string:permission_inject_input_reason",
+        "usedScene": {
+          "abilities": ["ServiceAbility"],
+          "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.GET_RUNNING_INFO",
+        "reason": "$string:permission_running_info_reason",
+        "usedScene": {
+          "abilities": ["ServiceAbility"],
+          "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.READ_IMAGEVIDEO",
+        "reason": "$string:permission_read_media_reason",
+        "usedScene": {
+          "abilities": ["EntryAbility"],
+          "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.WRITE_IMAGEVIDEO",
+        "reason": "$string:permission_write_media_reason",
+        "usedScene": {
+          "abilities": ["EntryAbility"],
+          "when": "inuse"
+        }
       }
     ]
   }
